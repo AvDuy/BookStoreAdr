@@ -1,6 +1,8 @@
 package com.example.bookstore;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -21,13 +23,34 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
 
+    FirebaseFirestore firestore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        firestore = FirebaseFirestore.getInstance();
 
+        Map<String, Object> user = new HashMap<>();
+        user.put("Fiest name", "esaey");
+        user.put("das name", "esaey");
+        user.put("dsad   name", "esaey");
 
+        firestore.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error adding document", e);
+                    }
+                });
     }
 }
