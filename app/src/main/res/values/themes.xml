@@ -3,6 +3,7 @@
     <style name="Base.Theme.BookStore" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">#C2F4B0</item>
     </style>
 
     <style name="Theme.BookStore" parent="Base.Theme.BookStore" />
