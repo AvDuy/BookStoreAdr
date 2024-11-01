@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_home, container, false);
+
         catRecyclerview = root.findViewById(R.id.rec_category);
 
         db = FirebaseFirestore.getInstance();
@@ -70,7 +71,7 @@ public class HomeFragment extends Fragment {
         categoryAdapter = new CategoryAdapter(getActivity(),categoryModelList);
         catRecyclerview.setAdapter(categoryAdapter);
 
-        db.collection( "Category")
+        db.collection("Category")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -79,9 +80,8 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 CategoryModel categoryModel = document.toObject(CategoryModel.class);
                                 categoryModelList.add(categoryModel);
-                                categoryAdapter.notifyDataSetChanged();
                             }
-                        } else {
+                            categoryAdapter.notifyDataSetChanged();
                         }
                     }
                 });
