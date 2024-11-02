@@ -1,6 +1,7 @@
 package com.example.bookstore.adaptes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookstore.R;
+import com.example.bookstore.activities.DetailedActivity;
 import com.example.bookstore.models.NewProductsModel;
 
 import java.util.List;
@@ -40,6 +42,17 @@ public class NewProductsAdapter extends RecyclerView.Adapter<NewProductsAdapter.
         Glide.with(context).load(list.get(position).getImg_url()).into(holder.newImg);
         holder.newName.setText(list.get(position).getName());
         holder.newPrice.setText(String.valueOf(list.get(position).getPrice()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailedActivity.class);
+                intent.putExtra("detailed",list.get(position));
+
+                context.startActivity(intent);
+
+            }
+        });
     }
 
     @Override
