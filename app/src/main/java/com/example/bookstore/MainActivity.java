@@ -31,24 +31,24 @@ private TextView user_name, user_email, user_phone, user_dob, user_gender;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
 
-        initUI();
         // Initialize Firestore
         firestore = FirebaseFirestore.getInstance();
+        initUI();
         // Load user info from Firestore
         showUserInfo();
     }
 
     private void initUI() {
         //ava = findViewById(R.id.profile_image);
-        user_name = findViewById(R.id.name);
-        user_gender = findViewById(R.id.gender);
-        user_dob = findViewById(R.id.birth);
-        user_email = findViewById(R.id.email);
-        user_phone = findViewById(R.id.phone);
+        user_name = findViewById(R.id.uname);
+        user_gender = findViewById(R.id.ugender);
+        user_dob = findViewById(R.id.udob);
+        user_email = findViewById(R.id.uemail);
+        user_phone = findViewById(R.id.uphone);
     }
 
     private void showUserInfo() {
-        DocumentReference docRef = firestore.collection("User_info").document("1");
+        DocumentReference docRef = firestore.collection("users").document("1");
         // Fetch data from Firestore
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
@@ -60,7 +60,7 @@ private TextView user_name, user_email, user_phone, user_dob, user_gender;
                     user_gender.setText(userInfo.isGender() ? "Male" : "Female");
                     user_dob.setText(userInfo.getDob());
                     user_email.setText(userInfo.getEmail());
-                    user_phone.setText(String.valueOf(userInfo.getPhone()));
+                    user_phone.setText(userInfo.getPhone());
                 } else {
                     Log.d("MainActivity", "User info is null");
                 }
@@ -69,4 +69,5 @@ private TextView user_name, user_email, user_phone, user_dob, user_gender;
             }
         }).addOnFailureListener(e -> Log.w("MainActivity", "Error getting document", e));
     }
+
 }

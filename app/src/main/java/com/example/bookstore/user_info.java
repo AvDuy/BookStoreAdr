@@ -1,15 +1,22 @@
 package com.example.bookstore;
 
-public class user_info {
-    private String name;
-    private boolean gender;
-    private String dob;
-    private String email;
-    private Number phone;
+import com.google.firebase.firestore.PropertyName;
 
-    public user_info(String name, boolean gender, String dob, String email, Number phone) {
-        this.name = name;
+public class user_info {
+    @PropertyName("Email")
+    private String name;
+    @PropertyName("Gender")
+    private boolean gender;
+    @PropertyName("Date of birth")
+    private String dob;
+    @PropertyName("Email")
+    private String email;
+    @PropertyName("Phone")
+    private String phone;
+
+    public user_info(boolean gender, String name, String dob, String email, String phone) {
         this.gender = gender;
+        this.name = name;
         this.dob = dob;
         this.email = email;
         this.phone = phone;
@@ -18,43 +25,45 @@ public class user_info {
     public user_info() {
     }
 
+    @PropertyName("Name")
     public String getName() {
         return name;
     }
-
+    @PropertyName("Name")
     public void setName(String name) {
         this.name = name;
     }
-
+    @PropertyName("Gender")
     public boolean isGender() {
         return gender;
     }
-
+    @PropertyName("Gender")
     public void setGender(boolean gender) {
         this.gender = gender;
     }
-
+    @PropertyName("Date of birth")
     public String getDob() {
         return dob;
     }
-
+    @PropertyName("Date of birth")
     public void setDob(String dob) {
         this.dob = dob;
     }
 
+    @PropertyName("Email")
     public String getEmail() {
         return email;
     }
-
+    @PropertyName("Email")
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public Number getPhone() {
+    @PropertyName("Phone")
+    public String getPhone() {
         return phone;
     }
-
-    public void setPhone(Number phone) {
+    @PropertyName("Phone")
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 }
