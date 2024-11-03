@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "825577879606",
+    "firebase_url": "https://bookstore-f9ac2-default-rtdb.firebaseio.com",
+    "project_id": "bookstore-f9ac2",
+    "storage_bucket": "bookstore-f9ac2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825577879606:android:e6453ff86b789efbac0097",
+        "android_client_info": {
+          "package_name": "com.example.bookapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825577879606-pmvjge2ion3a3uoe06c53cv7nohmflp8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bookapp",
+            "certificate_hash": "e3b8194cd18544073b7be6beeecdd8b283c5f05f"
+          }
+        },
+        {
+          "client_id": "825577879606-pm869p14ipd0cni5p42e58p7dbgd43fq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "[REDACTED]"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825577879606-pm869p14ipd0cni5p42e58p7dbgd43fq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825577879606:android:0346065fd4e0b96fac0097",
+        "android_client_info": {
+          "package_name": "com.example.bookstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825577879606-f4buvpkekj65ng7hk13chiirlr2nrfnv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bookstore",
+            "certificate_hash": "e3b8194cd18544073b7be6beeecdd8b283c5f05f"
+          }
+        },
+        {
+          "client_id": "825577879606-pm869p14ipd0cni5p42e58p7dbgd43fq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "[REDACTED]"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825577879606-pm869p14ipd0cni5p42e58p7dbgd43fq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825577879606:android:3f3ac972b4aa19a7ac0097",
+        "android_client_info": {
+          "package_name": "com.example.bookstoree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825577879606-pm869p14ipd0cni5p42e58p7dbgd43fq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "[REDACTED]"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825577879606-pm869p14ipd0cni5p42e58p7dbgd43fq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
