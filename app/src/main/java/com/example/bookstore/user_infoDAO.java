@@ -2,8 +2,10 @@ package com.example.bookstore;
 
 import com.google.firebase.firestore.PropertyName;
 
-public class user_info {
-    @PropertyName("Email")
+public class user_infoDAO {
+    @PropertyName("Avatar")
+    private String avatar;
+    @PropertyName("Name")
     private String name;
     @PropertyName("Gender")
     private boolean gender;
@@ -14,15 +16,16 @@ public class user_info {
     @PropertyName("Phone")
     private String phone;
 
-    public user_info(boolean gender, String name, String dob, String email, String phone) {
-        this.gender = gender;
+    public user_infoDAO(String avatar, String name, boolean gender, String dob, String email, String phone) {
+        this.avatar = avatar;
         this.name = name;
+        this.gender = gender;
         this.dob = dob;
         this.email = email;
         this.phone = phone;
     }
 
-    public user_info() {
+    public user_infoDAO() {
     }
 
     @PropertyName("Name")
@@ -65,5 +68,13 @@ public class user_info {
     @PropertyName("Phone")
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+    @PropertyName("Avatar")
+    public String getAvatar() {
+        return avatar;
+    }
+    @PropertyName("Avatar")
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

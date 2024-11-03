@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F4F4">
+    android:background="@color/white"
+    >
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="158dp"
+        android:layout_width="408dp"
+        android:layout_height="186dp"
         android:layout_marginTop="1dp"
-        android:background="#DE0B7F"
         android:orientation="vertical"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,18 +26,18 @@
             android:src="@drawable/ic_avatardefault"
             app:civ_border_width="2dp" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/changeprofile"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="36dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Change profile picture"-->
-<!--            android:textColor="@color/white" />-->
+        <Button
+            android:id="@+id/btn_choose_image"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:text="Choose Profile Image" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="413dp"
-        android:layout_height="309dp"
+        android:layout_width="415dp"
+        android:layout_height="447dp"
         android:layout_marginTop="92dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +47,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal">
 
             <TextView
@@ -57,8 +57,8 @@
                 android:background="#04FFFFFF"
                 android:text="Name" />
 
-            <TextView
-                android:id="@+id/uname"
+            <EditText
+                android:id="@+id/edt_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="right"
@@ -67,7 +67,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal">
 
             <TextView
@@ -76,17 +76,17 @@
                 android:layout_height="wrap_content"
                 android:text="Gender" />
 
-            <TextView
-                android:id="@+id/ugender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/edt_gender"
+                android:layout_width="371dp"
+                android:layout_height="match_parent"
                 android:gravity="right"
                 android:text="TextView" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal">
 
             <TextView
@@ -95,17 +95,17 @@
                 android:layout_height="wrap_content"
                 android:text="Date of birth" />
 
-            <TextView
-                android:id="@+id/udob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/edt_dob"
+                android:layout_width="334dp"
+                android:layout_height="match_parent"
                 android:gravity="right"
                 android:text="TextView" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal">
 
             <TextView
@@ -114,17 +114,17 @@
                 android:layout_height="wrap_content"
                 android:text="Email" />
 
-            <TextView
-                android:id="@+id/uemail"
+            <EditText
+                android:id="@+id/edt_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="right"
                 android:text="TextView" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal">
 
             <TextView
@@ -133,19 +133,19 @@
                 android:layout_height="wrap_content"
                 android:text="Phone" />
 
-            <TextView
-                android:id="@+id/uphone"
+            <EditText
+                android:id="@+id/edt_phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="right"
                 android:text="TextView" />
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_change_info"
+            android:id="@+id/save_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update account infomation" />
+            android:text="Save" />
 
     </LinearLayout>
 
