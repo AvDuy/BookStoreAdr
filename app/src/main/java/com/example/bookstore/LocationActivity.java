@@ -2,6 +2,7 @@ package com.example.bookstore;
 
 import static com.google.android.gms.common.util.CollectionUtils.listOf;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -33,6 +35,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -57,10 +61,12 @@ public class LocationActivity extends AppCompatActivity {
     private ArrayList<String> provinceList = new ArrayList<>();
     private ArrayList<String> districtList = new ArrayList<>();
     private ArrayList<String> wardList = new ArrayList<>();
-    private String checkPlace;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String lat, lon;
 
     FirebaseFirestore firestore;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = mAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,25 +82,43 @@ public class LocationActivity extends AppCompatActivity {
                 String selectedProvince = spinnerProvince.getSelectedItem().toString();
                 String selectedDistrict = spinnerDistrict.getSelectedItem().toString();
                 String selectedWard = spinnerWard.getSelectedItem().toString();
+                TextView tvStreet = findViewById(R.id.tv_street);
+                TextView tvPhone = findViewById(R.id.tv_phone);
+                String enteredStreet = tvStreet.getText().toString();
+                String enteredPhone = tvPhone.getText().toString();
 
-                // Save an address for a user
-                Map<String, Object> address = new HashMap<>();
-//                address.put("label", "Home");
-                address.put("street", "123 Main St");
-                address.put("ward", selectedWard);
-                address.put("district", selectedDistrict);
-                address.put("province", selectedProvince);
-                address.put("country", "Việt Nam");
-//                address.put("latitude", 37.7749);
-//                address.put("longitude", -122.4194);
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+                    // Save an address for a user
+                    Map<String, Object> address = new HashMap<>();
+                    address.put("phone", enteredPhone);
+                    address.put("street", enteredStreet);
+                    address.put("ward", selectedWard);
+                    address.put("district", selectedDistrict);
+                    address.put("province", selectedProvince);
+                    address.put("country", "Việt Nam");
+                    address.put("latitude", lat);
+                    address.put("longitude", lon);
 
-                db.collection("users").document("userId").collection("addresses")
-                        .add(address)
-                        .addOnSuccessListener(documentReference -> Log.d("Firestore", "Address added with ID: " + documentReference.getId()))
-                        .addOnFailureListener(e -> Log.w("Firestore", "Error adding address", e));
+                    db.collection("users").document(currentUser.getUid())
+                            .collection("addresses")
+                            .add(address)
+                            .addOnSuccessListener(documentReference -> {
+                                String addressId = documentReference.getId();
+                                Log.d("Firestore", "Address added with ID: " + addressId);
 
-                // Do something with the selected values
-                Log.d("SpinnerValues", "Province: " + selectedProvince + ", District: " + selectedDistrict + ", Ward: " + selectedWard);
+                                // Redirect to CheckOutActivity and pass the AddressID
+                                Intent intent = new Intent(LocationActivity.this, CheckOutActivity.class);
+                                intent.putExtra("AddressID", addressId);
+                                startActivity(intent);
+                            })
+                            .addOnFailureListener(e -> Log.w("Firestore", "Error adding address", e));
+
+                    // Do something with the selected values
+                    Log.d("SpinnerValues", "Province: " + selectedProvince + ", District: " + selectedDistrict + ", Ward: " + selectedWard);
+                }else {
+                    Log.e("Firestore", "User is not signed in");
+                }
             }
         });
 
@@ -198,7 +222,6 @@ public class LocationActivity extends AppCompatActivity {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 // Load wards for the selected district
                                 loadWards(data.optJSONObject(position).optString("id"));
-                                checkPlace = "district";
                                 zoomIng(data, position);
                             }
 
@@ -264,6 +287,8 @@ public class LocationActivity extends AppCompatActivity {
         // Load wards for the selected district
         double latitude = data.optJSONObject(position).optDouble("latitude", 0.0);
         double longitude = data.optJSONObject(position).optDouble("longitude", 0.0);
+        lat = String.valueOf(latitude);
+        lon = String.valueOf(longitude);
         if(latitude != 0 && longitude != 0){
             LatLng latLng = new LatLng(latitude, longitude);
             MapsFragment mapFrag = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
@@ -287,29 +312,5 @@ public class LocationActivity extends AppCompatActivity {
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
-    }
-
-    protected void pushFirebase() {
-        firestore = FirebaseFirestore.getInstance();
-
-        Map<String, Object> user = new HashMap<>();
-        user.put("First Name", "Khanh tre");
-        user.put("Second Name", "Nguyen");
-        user.put("Nickname", "NGu lon");
-
-        firestore.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error adding document", e);
-                    }
-                });
     }
 }

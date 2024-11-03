@@ -1,6 +1,8 @@
 package com.example.bookstore.models;
 
 public class Address {
+    private String phone;
+    private String addressId;
     private String country;
     private String province;
     private String district;
@@ -11,7 +13,8 @@ public class Address {
 
     public Address() {}
 
-    public Address(String country, String province, String district, String ward, String street, String latitude, String longitude) {
+    public Address(String phone, String country, String province, String district, String ward, String street, String latitude, String longitude) {
+        this.phone = phone;
         this.country = country;
         this.province = province;
         this.district = district;
@@ -20,6 +23,12 @@ public class Address {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public String getPhone() {return phone;}
+    public void setPhone(String phoneNumber) {this.phone = phone;}
+
+    public String getAddressId() {return addressId;}
+    public void setAddressId(String addressId) {this.addressId = addressId;}
 
     public String getCountry() {return country;}
     public void setCountry(String country) {this.country = country;}
