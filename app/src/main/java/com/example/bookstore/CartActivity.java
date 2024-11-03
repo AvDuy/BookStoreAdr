@@ -29,6 +29,6 @@ public class CartActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        toolbar = findViewById(R.id.my_cart_toolbar);
+
     }
 }
