@@ -1,10 +1,13 @@
 package com.example.bookstore.activities;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -12,7 +15,15 @@ import com.example.bookstore.R;
 import com.example.bookstore.models.NewProductsModel;
 import com.example.bookstore.models.PopularProductsModel;
 import com.example.bookstore.models.ShowAllModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class DetailedActivity extends AppCompatActivity {
 
@@ -29,14 +40,14 @@ public class DetailedActivity extends AppCompatActivity {
 
     //Show All
     ShowAllModel showAllModel = null;
-
+    FirebaseAuth auth;
     private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
-
+        auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
         final Object obj = getIntent().getSerializableExtra("detailed");
@@ -86,7 +97,40 @@ public class DetailedActivity extends AppCompatActivity {
             description.setText(showAllModel.getDescription());
             price.setText(String.valueOf(showAllModel.getPrice()));
             name.setText(showAllModel.getName());
-
         }
+
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToCart();
+            }
+        });
+    }
+
+    private void addToCart() {
+        String saveCurrentTime, saveCurrentDate;
+
+        Calendar calForDate  = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("MM dd, yyyy");
+        saveCurrentDate = currentDate.format(calForDate.getTime());
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
+        saveCurrentTime = currentTime.format(calForDate.getTime());
+
+        final HashMap<String,Object> cartMap =  new HashMap<>();
+
+        cartMap.put("productName",name.getText().toString());
+        cartMap.put("productPrice",price.getText().toString());
+        cartMap.put("currentTime",saveCurrentTime);
+        cartMap.put("currentDate",saveCurrentDate);
+
+        firestore.collection("AddtoCart").document(auth.getCurrentUser().getUid())
+                .collection("User").add(cartMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Toast.makeText(DetailedActivity.this,"Add to cart",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
     }
 }
