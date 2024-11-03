@@ -1,4 +1,9 @@
 <resources>
+    <string name="select_province">select province</string>
+    <string name="select_district">select district</string>
+    <string name="select_ward">select ward</string>
+
+
     <string name="app_name">BookStore</string>
     <string name="title_activity_maps">Map</string>
     <string name="action_geolocate">Pick Place</string>

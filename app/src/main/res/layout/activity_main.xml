@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         app:cardCornerRadius="30dp"
-        app:cardBackgroundColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,27 +47,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView">
 
-        <!-- Choose pick-up spot input -->
-        <EditText
-            android:id="@+id/pickup_location"
+        <Spinner
+            android:id="@+id/tinh_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Choose pick-up spot" />
+            android:layout_margin="8dp"
+            android:prompt="@string/select_province" />
 
-        <!-- Where to? input -->
-        <EditText
-            android:id="@+id/destination_location"
+        <Spinner
+            android:id="@+id/quan_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Where to?" />
+            android:layout_margin="8dp"
+            android:prompt="@string/select_district" />
 
-        <!-- Button to add new location -->
-        <Button
-            android:id="@+id/add_location_button"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/phuong_spinner"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create New" />
-
+            android:layout_margin="8dp"
+            android:prompt="@string/select_ward" />
     </LinearLayout>
 
     <LinearLayout
