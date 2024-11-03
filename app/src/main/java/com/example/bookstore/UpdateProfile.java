@@ -1,48 +1,68 @@
 package com.example.bookstore;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.auth.FirebaseAuth;
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-public class UpdateProfile extends  AppCompatActivity{
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+public class UpdateProfile extends AppCompatActivity {
     private EditText edtName, edtGender, edtDob, edtEmail, edtPhone;
-    private Button saveButton;
+    private Button saveButton, chooseImageButton;
+    private ImageView profileImageView;
     private FirebaseFirestore firestore;
-    private FirebaseAuth auth;
-    private String userId;
+    private StorageReference storageReference;
+    private Uri imageUri;
+    private ActivityResultLauncher<Intent> getContentLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_userprofile);
-
-        // Khởi tạo các thành phần
         firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        userId = auth.getCurrentUser().getUid();
-
+        storageReference = FirebaseStorage.getInstance().getReference("profile_images"); // Thay đổi để lưu trữ hình ảnh theo cách bạn muốn
         edtName = findViewById(R.id.edt_name);
         edtGender = findViewById(R.id.edt_gender);
         edtDob = findViewById(R.id.edt_dob);
         edtEmail = findViewById(R.id.edt_email);
         edtPhone = findViewById(R.id.edt_phone);
         saveButton = findViewById(R.id.save_button);
+        chooseImageButton = findViewById(R.id.btn_choose_image);
+        profileImageView = findViewById(R.id.profile_image); // Thay đổi theo ID của ImageView trong layout của bạn
 
-        // Hiển thị thông tin người dùng hiện tại
+        // Khởi tạo ActivityResultLauncher
+        getContentLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        imageUri = result.getData().getData();
+                        // Hiển thị hình ảnh đã chọn trong ImageView
+                        if (imageUri != null) {
+                            profileImageView.setImageURI(imageUri);
+                        }
+                    }
+                }
+        );
         showUserInfo();
-
-        // Xử lý nút "Save" để cập nhật thông tin
         saveButton.setOnClickListener(v -> updateUserInfo());
+        chooseImageButton.setOnClickListener(v -> chooseImage());
     }
 
     private void showUserInfo() {
-        DocumentReference docRef = firestore.collection("users").document(userId);
+        DocumentReference docRef = firestore.collection("users").document("1");
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 user_infoDAO userInfo = documentSnapshot.toObject(user_infoDAO.class);
@@ -52,6 +72,14 @@ public class UpdateProfile extends  AppCompatActivity{
                     edtDob.setText(userInfo.getDob());
                     edtEmail.setText(userInfo.getEmail());
                     edtPhone.setText(userInfo.getPhone());
+                    // Tải hình ảnh vào ImageView nếu có URL
+                    if (userInfo.getAvatar() != null) {
+                        Glide.with(this)
+                                .load(userInfo.getAvatar())
+                                .placeholder(R.drawable.ic_launcher_background)
+                                .error(R.drawable.ic_avatardefault)
+                                .into(profileImageView);
+                    }
                 }
             }
         }).addOnFailureListener(e -> Log.w("UpdateProfileActivity", "Error getting document", e));
@@ -64,20 +92,58 @@ public class UpdateProfile extends  AppCompatActivity{
         String email = edtEmail.getText().toString().trim();
         String phone = edtPhone.getText().toString().trim();
 
-        DocumentReference docRef = firestore.collection("users").document(userId);
-        docRef.update(
-                "name", name,
-                "gender", gender,
-                "dob", dob,
-                "email", email,
-                "phone", phone
-        ).addOnSuccessListener(aVoid -> {
-            Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-            finish();  // Quay lại MainActivity sau khi cập nhật thành công
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
-            Log.w("UpdateProfileActivity", "Error updating document", e);
-        });
+        // Nếu có hình ảnh được chọn, tải hình ảnh lên Firebase
+        if (imageUri != null) {
+            final String fileName = "profile_" + System.currentTimeMillis();
+            StorageReference fileReference = storageReference.child(fileName);
+            fileReference.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
+                    fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String avatarUrl = uri.toString();
+                        // Cập nhật thông tin người dùng bao gồm cả URL hình ảnh
+                        DocumentReference docRef = firestore.collection("users").document("1");
+                        docRef.update(
+                                "Name", name,
+                                "Gender", gender,
+                                "Date of birth", dob,
+                                "Email", email,
+                                "Phone", phone,
+                                "Avatar", avatarUrl // Cập nhật URL hình ảnh vào Firestore
+                        ).addOnSuccessListener(aVoid -> {
+                            Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(UpdateProfile.this, MainActivity.class)); // Quay lại MainActivity sau khi cập nhật thành công
+                            finish();
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                            Log.w("UpdateProfileActivity", "Error updating document", e);
+                        });
+                    })).addOnFailureListener(e -> {
+                Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                Log.w("UpdateProfileActivity", "Error uploading image", e);
+            });
+        } else {
+            // Nếu không có hình ảnh, chỉ cập nhật thông tin không có Avatar
+            DocumentReference docRef = firestore.collection("users").document("1");
+            docRef.update(
+                    "Name", name,
+                    "Gender", gender,
+                    "Date of birth", dob,
+                    "Email", email,
+                    "Phone", phone
+            ).addOnSuccessListener(aVoid -> {
+                Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(UpdateProfile.this, MainActivity.class)); // Quay lại MainActivity sau khi cập nhật thành công
+                finish();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                Log.w("UpdateProfileActivity", "Error updating document", e);
+            });
+        }
+    }
+
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        getContentLauncher.launch(Intent.createChooser(intent, "Select Picture"));
     }
 }
-
