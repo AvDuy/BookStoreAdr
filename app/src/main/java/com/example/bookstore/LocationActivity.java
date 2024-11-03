@@ -1,27 +1,19 @@
 package com.example.bookstore;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
 import static com.google.android.gms.common.util.CollectionUtils.listOf;
 
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -33,11 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity {
     private Button createNew;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -69,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> provinceList = new ArrayList<>();
     private ArrayList<String> districtList = new ArrayList<>();
     private ArrayList<String> wardList = new ArrayList<>();
+    private String checkPlace;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     FirebaseFirestore firestore;
 
@@ -76,8 +66,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.choose_location);
         placeSelect();
+
+        createNew = findViewById(R.id.btn_submit);
+        createNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedProvince = spinnerProvince.getSelectedItem().toString();
+                String selectedDistrict = spinnerDistrict.getSelectedItem().toString();
+                String selectedWard = spinnerWard.getSelectedItem().toString();
+
+                // Save an address for a user
+                Map<String, Object> address = new HashMap<>();
+//                address.put("label", "Home");
+                address.put("street", "123 Main St");
+                address.put("ward", selectedWard);
+                address.put("district", selectedDistrict);
+                address.put("province", selectedProvince);
+                address.put("country", "Việt Nam");
+//                address.put("latitude", 37.7749);
+//                address.put("longitude", -122.4194);
+
+                db.collection("users").document("userId").collection("addresses")
+                        .add(address)
+                        .addOnSuccessListener(documentReference -> Log.d("Firestore", "Address added with ID: " + documentReference.getId()))
+                        .addOnFailureListener(e -> Log.w("Firestore", "Error adding address", e));
+
+                // Do something with the selected values
+                Log.d("SpinnerValues", "Province: " + selectedProvince + ", District: " + selectedDistrict + ", Ward: " + selectedWard);
+            }
+        });
+
 
         Places.initialize(this,"[REDACTED]");
         autoComplete =(AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autoComplete);
@@ -101,13 +121,6 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-//        createNew.findViewById(R.id.add_location_button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                openPlacePicker();
-//            }
-//        });
     }
 
     protected void placeSelect(){
@@ -133,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject province = data.getJSONObject(i);
                             provinceList.add(province.getString("full_name"));
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, provinceList);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_spinner_item, provinceList);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerProvince.setAdapter(adapter);
 
@@ -176,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject district = data.getJSONObject(i);
                             districtList.add(district.getString("full_name"));
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, districtList);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_spinner_item, districtList);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerDistrict.setAdapter(adapter);
 
@@ -185,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 // Load wards for the selected district
                                 loadWards(data.optJSONObject(position).optString("id"));
+                                checkPlace = "district";
+                                zoomIng(data, position);
                             }
 
                             @Override
@@ -198,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Error loading districts", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationActivity.this, "Error loading districts", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -218,19 +233,13 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject ward = data.getJSONObject(i);
                             wardList.add(ward.getString("full_name"));
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, wardList);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_spinner_item, wardList);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerWard.setAdapter(adapter);
                         spinnerWard.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                // Load wards for the selected district
-                                double latitude = data.optJSONObject(position).optDouble("latitude", 0.0);
-                                double longitude = data.optJSONObject(position).optDouble("longitude", 0.0);
-                                LatLng latLng = new LatLng(latitude, longitude);
-                                MapsFragment mapFrag = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
-
-                                mapFrag.zoomOnMap(latLng);
+                                zoomIng(data, position);
                             }
 
                             @Override
@@ -244,11 +253,22 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Error loading wards", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationActivity.this, "Error loading wards", Toast.LENGTH_SHORT).show();
             }
         });
 
         requestQueue.add(request);
+    }
+
+    protected void zoomIng(JSONArray data, int position){
+        // Load wards for the selected district
+        double latitude = data.optJSONObject(position).optDouble("latitude", 0.0);
+        double longitude = data.optJSONObject(position).optDouble("longitude", 0.0);
+        if(latitude != 0 && longitude != 0){
+            LatLng latLng = new LatLng(latitude, longitude);
+            MapsFragment mapFrag = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+            mapFrag.zoomOnMap(latLng);
+        }
     }
 
     @Override
