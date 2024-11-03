@@ -74,12 +74,18 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-        intent.putExtra("userName", userName);      // Pass user data if needed
-        intent.putExtra("userEmail", userEmail);
-        intent.putExtra("userPassword", userPassword);
-        intent.putExtra("userPhone", userPhone);
-        startActivity(intent);
+       auth.createUserWithEmailAndPassword(userEmail,userPassword)
+               .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                   @Override
+                   public void onComplete(@NonNull Task<AuthResult> task) {
+                       if(task.isSuccessful()){
+                           Toast.makeText(RegisterActivity.this,"Successfully",Toast.LENGTH_SHORT).show();
+                           startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                       }else{
+                           Toast.makeText(RegisterActivity.this,"Register Failed" + task.getException(),Toast.LENGTH_SHORT).show();
+                       }
+                   }
+               });
 
         //startActivity(new Intent(RegisterActivity.this,MainActivity.class));
     }
