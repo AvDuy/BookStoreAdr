@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Intent intent = new Intent(RegisterActivity.this, OTP_Verify.class);
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         intent.putExtra("userName", userName);      // Pass user data if needed
         intent.putExtra("userEmail", userEmail);
         intent.putExtra("userPassword", userPassword);
