@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,13 +28,19 @@ public class UpdateProfile extends AppCompatActivity {
     private StorageReference storageReference;
     private Uri imageUri;
     private ActivityResultLauncher<Intent> getContentLauncher;
+    private FirebaseAuth auth;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_userprofile);
         firestore = FirebaseFirestore.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference("profile_images"); // Thay đổi để lưu trữ hình ảnh theo cách bạn muốn
+        auth = FirebaseAuth.getInstance(); // Khởi tạo FirebaseAuth
+
+        userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+
+        storageReference = FirebaseStorage.getInstance().getReference("profile_images");
         edtName = findViewById(R.id.edt_name);
         edtGender = findViewById(R.id.edt_gender);
         edtDob = findViewById(R.id.edt_dob);
@@ -41,48 +48,51 @@ public class UpdateProfile extends AppCompatActivity {
         edtPhone = findViewById(R.id.edt_phone);
         saveButton = findViewById(R.id.save_button);
         chooseImageButton = findViewById(R.id.btn_choose_image);
-        profileImageView = findViewById(R.id.profile_image); // Thay đổi theo ID của ImageView trong layout của bạn
-
-        // Khởi tạo ActivityResultLauncher
+        profileImageView = findViewById(R.id.profile_image);
         getContentLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         imageUri = result.getData().getData();
-                        // Hiển thị hình ảnh đã chọn trong ImageView
                         if (imageUri != null) {
                             profileImageView.setImageURI(imageUri);
                         }
                     }
                 }
         );
+
         showUserInfo();
         saveButton.setOnClickListener(v -> updateUserInfo());
         chooseImageButton.setOnClickListener(v -> chooseImage());
     }
 
     private void showUserInfo() {
-        DocumentReference docRef = firestore.collection("users").document("1");
-        docRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                user_infoDAO userInfo = documentSnapshot.toObject(user_infoDAO.class);
-                if (userInfo != null) {
-                    edtName.setText(userInfo.getName());
-                    edtGender.setText(userInfo.isGender() ? "Male" : "Female");
-                    edtDob.setText(userInfo.getDob());
-                    edtEmail.setText(userInfo.getEmail());
-                    edtPhone.setText(userInfo.getPhone());
-                    // Tải hình ảnh vào ImageView nếu có URL
-                    if (userInfo.getAvatar() != null) {
-                        Glide.with(this)
-                                .load(userInfo.getAvatar())
-                                .placeholder(R.drawable.ic_launcher_background)
-                                .error(R.drawable.ic_avatardefault)
-                                .into(profileImageView);
+        if (userId != null) {
+            DocumentReference docRef = firestore.collection("users").document(userId); // Sử dụng userId
+
+            docRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    user_infoDAO userInfo = documentSnapshot.toObject(user_infoDAO.class);
+                    if (userInfo != null) {
+                        edtName.setText(userInfo.getName());
+                        edtGender.setText(userInfo.isGender() ? "Male" : "Female");
+                        edtDob.setText(userInfo.getDob());
+                        edtEmail.setText(userInfo.getEmail());
+                        edtPhone.setText(userInfo.getPhone());
+                        // Tải hình ảnh vào ImageView nếu có URL
+                        if (userInfo.getAvatar() != null) {
+                            Glide.with(this)
+                                    .load(userInfo.getAvatar())
+                                    .placeholder(R.drawable.ic_launcher_background)
+                                    .error(R.drawable.ic_avatardefault)
+                                    .into(profileImageView);
+                        }
                     }
                 }
-            }
-        }).addOnFailureListener(e -> Log.w("UpdateProfileActivity", "Error getting document", e));
+            }).addOnFailureListener(e -> Log.w("UpdateProfileActivity", "Error getting document", e));
+        } else {
+            Log.d("UpdateProfileActivity", "User is not authenticated");
+        }
     }
 
     private void updateUserInfo() {
@@ -100,43 +110,47 @@ public class UpdateProfile extends AppCompatActivity {
                     fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
                         String avatarUrl = uri.toString();
                         // Cập nhật thông tin người dùng bao gồm cả URL hình ảnh
-                        DocumentReference docRef = firestore.collection("users").document("1");
-                        docRef.update(
-                                "Name", name,
-                                "Gender", gender,
-                                "Date of birth", dob,
-                                "Email", email,
-                                "Phone", phone,
-                                "Avatar", avatarUrl // Cập nhật URL hình ảnh vào Firestore
-                        ).addOnSuccessListener(aVoid -> {
-                            Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(UpdateProfile.this, MainActivity.class)); // Quay lại MainActivity sau khi cập nhật thành công
-                            finish();
-                        }).addOnFailureListener(e -> {
-                            Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
-                            Log.w("UpdateProfileActivity", "Error updating document", e);
-                        });
+                        if (userId != null) {
+                            DocumentReference docRef = firestore.collection("users").document(userId); // Sử dụng userId
+                            docRef.update(
+                                    "Name", name,
+                                    "Gender", gender,
+                                    "Date of birth", dob,
+                                    "Email", email,
+                                    "Phone", phone,
+                                    "Avatar", avatarUrl // Cập nhật URL hình ảnh vào Firestore
+                            ).addOnSuccessListener(aVoid -> {
+                                Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(UpdateProfile.this, MainActivity.class));
+                                finish();
+                            }).addOnFailureListener(e -> {
+                                Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                                Log.w("UpdateProfileActivity", "Error updating document", e);
+                            });
+                        }
                     })).addOnFailureListener(e -> {
                 Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show();
                 Log.w("UpdateProfileActivity", "Error uploading image", e);
             });
         } else {
             // Nếu không có hình ảnh, chỉ cập nhật thông tin không có Avatar
-            DocumentReference docRef = firestore.collection("users").document("1");
-            docRef.update(
-                    "Name", name,
-                    "Gender", gender,
-                    "Date of birth", dob,
-                    "Email", email,
-                    "Phone", phone
-            ).addOnSuccessListener(aVoid -> {
-                Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(UpdateProfile.this, MainActivity.class)); // Quay lại MainActivity sau khi cập nhật thành công
-                finish();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
-                Log.w("UpdateProfileActivity", "Error updating document", e);
-            });
+            if (userId != null) {
+                DocumentReference docRef = firestore.collection("users").document(userId); // Sử dụng userId
+                docRef.update(
+                        "Name", name,
+                        "Gender", gender,
+                        "Date of birth", dob,
+                        "Email", email,
+                        "Phone", phone
+                ).addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(UpdateProfile.this, MainActivity.class));
+                    finish();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                    Log.w("UpdateProfileActivity", "Error updating document", e);
+                });
+            }
         }
     }
 
