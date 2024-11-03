@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.example.bookstore.R;
 import com.example.bookstore.models.NewProductsModel;
 import com.example.bookstore.models.PopularProductsModel;
+import com.example.bookstore.models.ShowAllModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DetailedActivity extends AppCompatActivity {
@@ -26,6 +27,9 @@ public class DetailedActivity extends AppCompatActivity {
     //Popular Products
     PopularProductsModel popularProductsModel = null;
 
+    //Show All
+    ShowAllModel showAllModel = null;
+
     private FirebaseFirestore firestore;
 
     @Override
@@ -37,10 +41,12 @@ public class DetailedActivity extends AppCompatActivity {
 
         final Object obj = getIntent().getSerializableExtra("detailed");
 
-        if( obj instanceof NewProductsModel){
+        if (obj instanceof NewProductsModel) {
             newProductsModel = (NewProductsModel) obj;
-        }else if(obj instanceof PopularProductsModel){
+        } else if (obj instanceof PopularProductsModel) {
             popularProductsModel = (PopularProductsModel) obj;
+        } else if (obj instanceof ShowAllModel) {
+            showAllModel = (ShowAllModel) obj;
         }
 
         detailedImg = findViewById(R.id.detailed_img);
@@ -54,7 +60,7 @@ public class DetailedActivity extends AppCompatActivity {
         removeItems = findViewById(R.id.remove_item);
 
         //New Products
-        if(newProductsModel != null){
+        if (newProductsModel != null) {
             Glide.with(getApplicationContext()).load(newProductsModel.getImg_url()).into(detailedImg);
             name.setText(newProductsModel.getName());
             rating.setText(newProductsModel.getRating());
@@ -63,7 +69,7 @@ public class DetailedActivity extends AppCompatActivity {
             name.setText(newProductsModel.getName());
         }
         //Popular Products
-        if(popularProductsModel != null){
+        if (popularProductsModel != null) {
             Glide.with(getApplicationContext()).load(popularProductsModel.getImg_url()).into(detailedImg);
             name.setText(popularProductsModel.getName());
             rating.setText(popularProductsModel.getRating());
@@ -72,5 +78,15 @@ public class DetailedActivity extends AppCompatActivity {
             name.setText(popularProductsModel.getName());
         }
 
+        //Show ALl Products
+        if (showAllModel != null) {
+            Glide.with(getApplicationContext()).load(showAllModel.getImg_url()).into(detailedImg);
+            name.setText(showAllModel.getName());
+            rating.setText(showAllModel.getRating());
+            description.setText(showAllModel.getDescription());
+            price.setText(String.valueOf(showAllModel.getPrice()));
+            name.setText(showAllModel.getName());
+
+        }
     }
 }
