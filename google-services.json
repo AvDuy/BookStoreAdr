@@ -50,7 +50,6 @@
           "package_name": "com.example.bookstore"
         }
       },
-      "oauth_client": [],
       "oauth_client": [
         {
           "client_id": "825577879606-f4buvpkekj65ng7hk13chiirlr2nrfnv.apps.googleusercontent.com",
@@ -101,7 +100,6 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
           "other_platform_oauth_client": [
             {
               "client_id": "825577879606-pm869p14ipd0cni5p42e58p7dbgd43fq.apps.googleusercontent.com",
