@@ -107,6 +107,7 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
                                 if (document != null && document.exists()) {
                                     List<Map<String, Object>> cartItems = (List<Map<String, Object>>) document.get("cartItems");
                                     if (cartItems != null) {
+                                        total = 0d;
                                         List<Product> products = new ArrayList<>();
                                         for (Map<String, Object> item : cartItems) {
                                             // Get the product details map
@@ -170,19 +171,20 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
 
     private void setSubmitOrder(){
         Date now = new Date();
-        Order order = new Order(currentUser.getUid(),"1",total,"0",now, now);
-        db.collection("cart").document(currentUser.getUid())
-                .collection("cartItem")
-                .add(orderList)
+        Order order = new Order(currentUser.getUid(),addressId,cartId,total,"0",now, now);
+        db.collection("Orders").document(currentUser.getUid())
+                .collection("Order")
+                .add(order)
                 .addOnSuccessListener(documentReference -> {
-                    String cartId = documentReference.getId();
-                    Log.d("Firestore", "Address added with ID: " + cartId);
+                    String orderId = documentReference.getId();
+                    Log.d("OrderAdd", "OrderAdd added with ID: " + orderId);
+
                     // Redirect to CheckOutActivity and pass the AddressID
                     //Intent intent = new Intent(LocationActivity.this, CheckOutActivity.class);
                     //intent.putExtra("AddressID", addressId);
                     //startActivity(intent);
                 })
-                .addOnFailureListener(e -> Log.w("Firestore", "Error adding address", e));
+                .addOnFailureListener(e -> Log.w("OrderAdd", "Error adding address", e));
 
         // Do something with the selected values
     }

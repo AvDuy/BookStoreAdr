@@ -6,6 +6,7 @@ import java.util.List;
 public class Order {
     private String userId;
     private String cartId;
+    private String addressId;
     private double totalAmount;
     private String status;
     private Date createdAt;
@@ -14,14 +15,18 @@ public class Order {
     // Empty constructor for Firestore
     public Order() {}
 
-    public Order(String userId, String cartId, double totalAmount, String status, Date createdAt, Date updatedAt) {
+    public Order(String userId, String cartId, String addressId, double totalAmount, String status, Date createdAt, Date updatedAt) {
         this.userId = userId;
         this.cartId = cartId;
+        this.addressId = addressId;
         this.totalAmount = totalAmount;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public String getAddressId() {return addressId;}
+    public void setAddressId(String addressId) {this.addressId = addressId;}
 
     public String getCartId() {return cartId;}
     public void setCartId(String cartId) {this.cartId = cartId;}
