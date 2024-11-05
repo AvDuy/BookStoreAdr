@@ -15,11 +15,11 @@ import com.example.bookstore.R;
 import com.example.bookstore.models.CartItem;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+public class ProductHistoryAdapter extends RecyclerView.Adapter<ProductHistoryAdapter.ProductViewHolder> {
     private final List<CartItem> cartItemList;
     private final Context context;
 
-    public ProductAdapter(Context context, List<CartItem> cartItemList) {
+    public ProductHistoryAdapter(Context context, List<CartItem> cartItemList) {
         this.context = context;
         this.cartItemList = cartItemList;
     }
