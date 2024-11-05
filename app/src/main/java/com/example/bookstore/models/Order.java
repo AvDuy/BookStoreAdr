@@ -29,7 +29,6 @@ public class Order implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Order(String userId, String cartId, String addressId, double totalAmount, String status, Date createdAt, Date updatedAt) {
     public String getOrderId() {
         return orderId;
     }

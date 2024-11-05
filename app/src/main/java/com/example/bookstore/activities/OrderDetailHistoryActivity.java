@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.bookstore.R;
-import com.example.bookstore.adaptes.ProductAdapter;
+import com.example.bookstore.adaptes.ProductHistoryAdapter;
 import com.example.bookstore.models.CartItem;
 import com.example.bookstore.models.Order;
 import com.example.bookstore.models.Product;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class OrderDetailHistoryActivity extends AppCompatActivity {
     private static final String TAG = "OrderDetailHistoryActivity";
     private RecyclerView recyclerViewProducts;
-    private ProductAdapter productAdapter;
+    private ProductHistoryAdapter productAdapter;
     private List<CartItem> cartItemList = new ArrayList<>();
     private FirebaseFirestore db;
 
@@ -70,7 +70,7 @@ public class OrderDetailHistoryActivity extends AppCompatActivity {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userId = (currentUser != null) ? currentUser.getUid() : "TV1xyM399EgkXAHanQPoyIzcLnA3";
 
-        productAdapter = new ProductAdapter(this, cartItemList);
+        productAdapter = new ProductHistoryAdapter(this, cartItemList);
         recyclerViewProducts.setAdapter(productAdapter);
 
         // Retrieve Order from intent
