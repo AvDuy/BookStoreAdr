@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -76,13 +75,13 @@
                 android:layout_height="wrap_content"
                 android:text="Gender" />
 
-            <EditText
-                android:id="@+id/edt_gender"
-                android:layout_width="371dp"
-                android:layout_height="match_parent"
-                android:gravity="right"
-                android:text="TextView" />
+            <Spinner
+                android:id="@+id/spinner_gender"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:gravity="right" />
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
