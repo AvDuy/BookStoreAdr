@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bookstore.activities.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
@@ -36,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         if(auth.getCurrentUser() != null){
-            startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
             finish();
         }
         name = findViewById(R.id.name);

@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
     private String addressId, cartId;
     private Double total = 0d;
     private Cart cart;
+    private RadioGroup paymentRadioGroup;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -171,7 +174,11 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
 
     private void setSubmitOrder(){
         Date now = new Date();
-        Order order = new Order(currentUser.getUid(),addressId,cartId,total,"0",now, now);
+        paymentRadioGroup = findViewById(R.id.payment_method);
+        int selectedPayment = paymentRadioGroup.getCheckedRadioButtonId();
+        RadioButton selectedRadioButton = findViewById(selectedPayment);
+        //Order User Cart Add Payment total status
+        Order order = new Order(currentUser.getUid(),cartId,addressId,selectedRadioButton.getText().toString(),total,"0",now, now);
         db.collection("Orders").document(currentUser.getUid())
                 .collection("Order")
                 .add(order)
