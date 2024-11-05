@@ -19,6 +19,7 @@ import com.example.bookstore.R;
 import com.example.bookstore.adaptes.OrderHistoryAdapter;
 import com.example.bookstore.models.Order;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
@@ -38,7 +39,7 @@ public class OrderHistoryFragment extends Fragment  {
     private ProgressBar progressBar; // Khai báo ProgressBar
     private FirebaseAuth auth;
     // ID người dùng cố định
-    private static final String USER_ID = "TV1xyM399EgkXAHanQPoyIzcLnA3";
+  // private static final String USER_ID = "TV1xyM399EgkXAHanQPoyIzcLnA3";
 
     public static OrderHistoryFragment newInstance(int position) {
         OrderHistoryFragment fragment = new OrderHistoryFragment();
@@ -81,9 +82,9 @@ public class OrderHistoryFragment extends Fragment  {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE); // Ẩn RecyclerView
         auth = FirebaseAuth.getInstance();
-
+        FirebaseUser user = auth.getCurrentUser();
         // Sử dụng USER_ID cố định
-        String userId = USER_ID;
+        String userId = user != null ? user.getUid() : "TV1xyM399EgkXAHanQPoyIzcLnA3";;
         Log.d("OrderHistoryFragment", "User ID: " + userId);
 
         // Remove previous listener if exists

@@ -19,6 +19,9 @@ import com.example.bookstore.models.CartItem;
 import com.example.bookstore.models.Order;
 import com.example.bookstore.R;
 import com.example.bookstore.models.Product;
+import com.google.android.play.integrity.internal.u;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -84,10 +87,13 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             return;
         }
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userId = currentUser != null ? currentUser.getUid() : "TV1xyM399EgkXAHanQPoyIzcLnA3";
         // Retrieve the cart items for the specified user and cartId
         FirebaseFirestore.getInstance()
                 .collection("Cart")
-                .document("TV1xyM399EgkXAHanQPoyIzcLnA3") // Replace with the appropriate user ID
+                .document(userId) // Replace with the appropriate user ID
                 .collection("CartItem")
                 .document(cartId) // Assuming cartId is the document ID for CartItem
                 .get()

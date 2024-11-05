@@ -28,7 +28,7 @@
             </intent-filter>
         </activity> <!-- Khai báo DetailedActivity -->
         <activity android:name=".activities.DetailedActivity" />
-
+<activity android:name=".activities.OrderDetailHistoryActivity"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
