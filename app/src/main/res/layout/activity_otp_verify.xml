@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/lightgrey">
+
+    <!-- OTP Image -->
+    <ImageView
+        android:id="@+id/img_otp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_otp_image"
+        android:contentDescription="OTP Illustration"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"/><!-- Replace with your OTP image drawable -->
+
+
+    <!-- Instruction Text -->
+    <TextView
+        android:id="@+id/tv_instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter your code that we have sent to your"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/img_otp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Email Address Text -->
+    <TextView
+        android:id="@+id/otp_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test@gmail.com"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tv_instruction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp"/><!-- Replace with dynamic email -->
+
+
+    <!-- Phone Number Text -->
+    <TextView
+        android:id="@+id/otp_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+91 9865425638"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/otp_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp"
+        /> <!-- Replace with dynamic phone number -->
+
+
+    <!-- OTP Code Boxes -->
+    <LinearLayout
+        android:id="@+id/otp_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/otp_phone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <!-- OTP EditTexts for individual digits -->
+        <EditText
+            android:id="@+id/et_otp_1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:background="@drawable/edit_text_bg"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_margin="4dp"
+            />
+
+        <EditText
+            android:id="@+id/et_otp_2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:background="@drawable/edit_text_bg"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_margin="4dp"/>
+
+        <EditText
+            android:id="@+id/et_otp_3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:background="@drawable/edit_text_bg"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_margin="4dp"/>
+
+        <EditText
+            android:id="@+id/et_otp_4"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:background="@drawable/edit_text_bg"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_margin="4dp"/>
+    </LinearLayout>
+
+    <!-- Verify Button -->
+    <Button
+        android:id="@+id/btn_verify"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Verify"
+        android:backgroundTint="@color/blue"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/otp_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.5"/>
+
+    <!-- Resend OTP TextView -->
+    <TextView
+        android:id="@+id/tv_resend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Didn't receive OTP? Resend Code"
+        android:textSize="16sp"
+        android:textColor="@color/blue"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_verify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
