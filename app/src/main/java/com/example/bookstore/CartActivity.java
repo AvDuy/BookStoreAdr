@@ -15,6 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookstore.activities.DetailedActivity;
 import com.example.bookstore.adapters.MyCartAdapter;
 import com.example.bookstore.model.MyCartModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -83,6 +84,7 @@ public class CartActivity extends AppCompatActivity {
     };
 
     public void CheckOut(View view) {
-
+        Intent intent = new Intent(CartActivity.this, CheckOutActivity.class);
+        startActivity(intent);
     }
 }
