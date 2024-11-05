@@ -22,6 +22,9 @@
     <string name="camera_demo_description">Demonstrates camera functions.</string>
     <string name="circle_demo_label">Circles</string>
     <string name="circle_demo_description">Demonstrates how to add Circles to a map.</string>
+    <string name="location_permission_denied">Demonstrates how to add Circles to a map.</string>
+    <string name="permission_required_toast">Demonstrates how to add Circles to a map.</string>
+    <string name="permission_rationale_location">Demonstrates how to add Circles to a map.</string>
 
     <string name="camera_clamping_demo_label">Camera Clamping</string>
     <string name="camera_clamping_demo_description">Demonstrates how to constrain the camera to specific boundaries and zoom levels.</string>
