@@ -7,15 +7,36 @@ public class MyCartModel {
     String productPrice;
     String totalQuantity;
     int totalPrice;
+    String Del;
+    private String cartId;
 
     public MyCartModel() {
     }
 
-    public MyCartModel(String imgurl, String productName, String productPrice, String totalQuantity, int totalPrice) {
+    public MyCartModel(String imgurl, String productName, String productPrice, String totalQuantity, int totalPrice, String del,String cartId) {
+        this.Imgurl = imgurl;
         this.productName = productName;
         this.productPrice = productPrice;
         this.totalQuantity = totalQuantity;
         this.totalPrice = totalPrice;
+        this.Del = del;
+        this.cartId = cartId;
+    }
+
+    public String getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(String cartId) {
+        this.cartId = cartId;
+    }
+
+    public String getDel() {
+        return Del;
+    }
+
+    public void setDel(String del) {
+        Del = del;
     }
 
     public String getImgurl() {

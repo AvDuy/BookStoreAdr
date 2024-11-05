@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -87,4 +88,32 @@ public class CartActivity extends AppCompatActivity {
         Intent intent = new Intent(CartActivity.this, CheckOutActivity.class);
         startActivity(intent);
     }
+
+    public void deleteItem(String cartId) {
+        // Get the current user's cart collection reference
+        firestore.collection("Cart")
+                .document(auth.getCurrentUser().getUid())
+                .collection("CartItem")
+                .document(cartId)
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // Remove from local list and notify the adapter
+                            for (int i = 0; i < cartModelList.size(); i++) {
+                                if (cartModelList.get(i).getCartId().equals(cartId)) {
+                                    cartModelList.remove(i);
+                                    cartAdapter.notifyItemRemoved(i);
+                                    break; // Exit loop after removing
+                                }
+                            }
+                        } else {
+                            // Handle error
+                            Log.w("Firestore", "Error deleting document", task.getException());
+                        }
+                    }
+                });
+    }
+
 }

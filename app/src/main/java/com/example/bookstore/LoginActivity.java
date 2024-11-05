@@ -29,10 +29,10 @@ public class LoginActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
     }
+
 
     public void signIn(View view) {
         String userEmail = email.getText().toString();
