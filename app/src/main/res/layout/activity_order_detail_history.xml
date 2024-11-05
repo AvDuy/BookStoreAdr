@@ -94,6 +94,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textOrderTotalAmount"
             android:layout_marginTop="8dp" />
+
+        <!-- New TextViews for Payment Method and Address -->
+        <TextView
+            android:id="@+id/textPaymentMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment Method: Credit Card"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textOrderStatus"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/textAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address: 123 Main St, City, Country"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textPaymentMethod"
+            android:layout_marginTop="8dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

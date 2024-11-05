@@ -12,6 +12,9 @@
         android:title="My Cart"
         android:icon="@drawable/cart"
         app:showAsAction="always"/>
-
-
+    <item
+        android:id="@+id/thongbao"
+        android:title="Notifications"
+        android:icon="@drawable/icon_thongbao"
+        app:showAsAction="always"/>
 </menu>
