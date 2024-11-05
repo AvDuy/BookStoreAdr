@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,6 +15,7 @@ import com.example.bookstore.CheckOutActivity;
 import com.example.bookstore.LoginActivity;
 import com.example.bookstore.R;
 import com.example.bookstore.RegisterActivity;
+import com.example.bookstore.User_menu; // Nếu bạn có lớp này
 import com.example.bookstore.fragments.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -34,14 +33,18 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
 
+        // Thiết lập toolbar
         toolbar = findViewById(R.id.home_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator (R.drawable.ic_launcher_foreground);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_foreground);
 
 
         homeFragment = new HomeFragment();
         loadFragment(homeFragment);
+
+
+
     }
 
 
@@ -66,8 +69,18 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else if (id == R.id.menu_my_cart) {
             startActivity(new Intent( MainActivity.this, CheckOutActivity.class));
+            return true;
+        }else if (id == R.id.thongbao) {
+            openNotifications();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
         return true;
     }
-
+    private void openNotifications() {
+        // Mở thông báo
+        Intent intent = new Intent(this, NotificationActivity.class); // Thay NotificationActivity bằng hoạt động thông báo của bạn
+        startActivity(intent);
+    }
 }

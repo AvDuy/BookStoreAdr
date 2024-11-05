@@ -1,5 +1,6 @@
 package com.example.bookstore.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bookstore.User_menu;
 import com.example.bookstore.adaptes.OrderPagerAdapter;
 import com.example.bookstore.R;
 import com.google.android.material.tabs.TabLayout;
@@ -27,16 +29,16 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_order_history);
 
-//        Toolbar toolbar = findViewById(R.id.tb1);
-//        setSupportActionBar(toolbar);
-//
-//        ImageView backArrow = findViewById(R.id.backArrow);
-//        backArrow.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                 // Go back to the previous screen
-//            }
-//        });
+        ImageView backArrow = findViewById(R.id.backArrow);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Quay lại OrderHistoryActivity
+                Intent intent = new Intent(OrderHistoryActivity.this, User_menu.class);
+                startActivity(intent);
+                finish(); // Kết thúc OrderDetailHistoryActivity
+            }
+        });
         // Liên kết các view với ID trong layout XML
         viewPagerOrderStatus = findViewById(R.id.viewPagerOrderStatus);
         tabLayoutOrderStatus = findViewById(R.id.tabLayoutOrderStatus);
