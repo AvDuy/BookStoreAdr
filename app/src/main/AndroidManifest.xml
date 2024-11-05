@@ -57,13 +57,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".UpdateProfile" />
         <activity android:name=".UserProfile" />
-        <activity android:name=".User_menu" />
+        <activity android:name=".User_menu"
+            android:exported="true">
+        </activity>
 
         <activity
             android:name=".LoginActivity"
