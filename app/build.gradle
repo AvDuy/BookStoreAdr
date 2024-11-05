@@ -29,7 +29,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
 dependencies {
 
     implementation libs.appcompat
@@ -37,7 +36,6 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.firebase.auth
-    implementation libs.firebase.firestore
     implementation libs.firebase.firestore
     implementation libs.play.services.maps
     implementation libs.places
@@ -62,14 +60,8 @@ dependencies {
 
 
 
-    // Import the BoM for the Firebase platform
-    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
-
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-auth")
-
-
+    /// imageSlideshow
+    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
