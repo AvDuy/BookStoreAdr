@@ -2,7 +2,7 @@ package com.example.bookstore;
 
 import com.google.firebase.firestore.PropertyName;
 
-public class user_infoDAO {
+public class user_infoModel {
     @PropertyName("Avatar")
     private String avatar;
     @PropertyName("Name")
@@ -16,7 +16,7 @@ public class user_infoDAO {
     @PropertyName("Phone")
     private String phone;
 
-    public user_infoDAO(String avatar, String name, boolean gender, String dob, String email, String phone) {
+    public user_infoModel(String avatar, String name, boolean gender, String dob, String email, String phone) {
         this.avatar = avatar;
         this.name = name;
         this.gender = gender;
@@ -25,7 +25,7 @@ public class user_infoDAO {
         this.phone = phone;
     }
 
-    public user_infoDAO() {
+    public user_infoModel() {
     }
 
     @PropertyName("Name")

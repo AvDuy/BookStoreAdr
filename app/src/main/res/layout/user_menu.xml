@@ -42,12 +42,13 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/rank"
+            <Button
+                android:id="@+id/info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rank"
-                android:textColor="#888"
+                android:backgroundTint="#D30385FF"
+                android:text="Show your infomation"
+                android:textColor="#FDFDFD"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>

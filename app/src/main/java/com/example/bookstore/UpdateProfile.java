@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 public class UpdateProfile extends AppCompatActivity {
     private EditText edtName, edtGender, edtDob, edtEmail, edtPhone;
@@ -36,8 +35,7 @@ public class UpdateProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_userprofile);
         firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance(); // Khởi tạo FirebaseAuth
-
+        auth = FirebaseAuth.getInstance();
         userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
 
         storageReference = FirebaseStorage.getInstance().getReference("profile_images");
@@ -72,7 +70,7 @@ public class UpdateProfile extends AppCompatActivity {
 
             docRef.get().addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
-                    user_infoDAO userInfo = documentSnapshot.toObject(user_infoDAO.class);
+                    user_infoModel userInfo = documentSnapshot.toObject(user_infoModel.class);
                     if (userInfo != null) {
                         edtName.setText(userInfo.getName());
                         edtGender.setText(userInfo.isGender() ? "Male" : "Female");
@@ -121,7 +119,7 @@ public class UpdateProfile extends AppCompatActivity {
                                     "Avatar", avatarUrl // Cập nhật URL hình ảnh vào Firestore
                             ).addOnSuccessListener(aVoid -> {
                                 Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(UpdateProfile.this, MainActivity.class));
+                                startActivity(new Intent(UpdateProfile.this, UserProfile.class));
                                 finish();
                             }).addOnFailureListener(e -> {
                                 Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
@@ -144,7 +142,7 @@ public class UpdateProfile extends AppCompatActivity {
                         "Phone", phone
                 ).addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(UpdateProfile.this, MainActivity.class));
+                    startActivity(new Intent(UpdateProfile.this, UserProfile.class));
                     finish();
                 }).addOnFailureListener(e -> {
                     Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();

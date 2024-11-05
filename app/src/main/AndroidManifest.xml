@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".UpdateProfile" />
+        <activity android:name=".UserProfile" />
+        <activity android:name=".User_menu" />
 
     </application>
 
