@@ -55,10 +55,6 @@
         <activity
             android:name=".activities.OrderHistoryActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".UpdateProfile" />
         <activity android:name=".UserProfile" />
@@ -69,8 +65,10 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true">
-
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity> <!-- Khai báo DetailedActivity -->
         <activity android:name=".activities.DetailedActivity" />
 

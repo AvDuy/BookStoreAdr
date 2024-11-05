@@ -46,6 +46,7 @@ public class PopularProductsAdapter extends RecyclerView.Adapter<PopularProducts
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailedActivity.class);
                 intent.putExtra("detailed",popularProductsModelList.get(position));
+                intent.putExtra("imgURL",popularProductsModelList.get(position).getImg_url());
                 context.startActivity(intent);
 
             }

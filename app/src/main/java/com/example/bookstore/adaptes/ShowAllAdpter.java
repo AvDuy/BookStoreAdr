@@ -46,7 +46,7 @@ public class ShowAllAdpter extends RecyclerView.Adapter<ShowAllAdpter.ViewHolder
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailedActivity.class);
                 intent.putExtra("detailed",list.get(position));
-
+                intent.putExtra("imgURL",list.get(position).getImg_url());
                 context.startActivity(intent);
             }
         });

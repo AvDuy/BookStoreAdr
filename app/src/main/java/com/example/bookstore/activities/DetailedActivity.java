@@ -1,7 +1,9 @@
 package com.example.bookstore.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,8 +17,11 @@ import com.bumptech.glide.Glide;
 import com.example.bookstore.CheckOutActivity;
 import com.example.bookstore.LocationActivity;
 import com.example.bookstore.R;
+import com.example.bookstore.models.Cart;
+import com.example.bookstore.models.CartItem;
 import com.example.bookstore.models.NewProductsModel;
 import com.example.bookstore.models.PopularProductsModel;
+import com.example.bookstore.models.Product;
 import com.example.bookstore.models.ShowAllModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,17 +30,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class DetailedActivity extends AppCompatActivity {
-
+    private List<CartItem> cartItems;
     ImageView detailedImg;
     TextView rating, name, description, price, quantity;
     Button addToCart, buyNow;
     ImageView addItems, removeItems;
     int totalQuantity = 1;
     int totalPrice = 0;
+    private Cart cart;
     //New Products
     NewProductsModel newProductsModel = null;
 
@@ -154,36 +162,106 @@ public class DetailedActivity extends AppCompatActivity {
     }
 
     private void setBuyNow(){
-        Intent intent = new Intent(DetailedActivity.this, CheckOutActivity.class);
-        startActivity(intent);
+        cartItems = new ArrayList<>();
+        int quanti = Integer.parseInt(quantity.getText().toString());
+        Product product = new Product(getIntent().getStringExtra("imgURL"),name.getText().toString(),Double.parseDouble(price.getText().toString()));
+        cartItems.add(new CartItem(
+                product,quanti,product.getPrice()*quanti));
+
+        cart = new Cart(cartItems);
+        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
+                .collection("CartItem")
+                .add(cart)
+                .addOnSuccessListener(documentReference -> {
+                    String cartId= documentReference.getId();
+                    Log.d("CartItem", "CraftItem add with ID: " + cartId);;
+                    Intent intent = new Intent(DetailedActivity.this, CheckOutActivity.class);
+                    intent.putExtra("cartId", cartId);
+                    intent.putExtra("action", "buynow");
+                    startActivity(intent);
+                })
+                .addOnFailureListener(e -> Log.w("CartItem", "Error adding address", e));
     }
 
     private void addToCart() {
-        String saveCurrentTime, saveCurrentDate;
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String cartID = sharedPreferences.getString("cartId", null); // null is the default value if "cartId" is not found
+        if(cartID == null){
+            cartItems = new ArrayList<>();
+            int quanti = Integer.parseInt(quantity.getText().toString());
+            Product product = new Product(getIntent().getStringExtra("imgURL"),name.getText().toString(),Double.parseDouble(price.getText().toString()));
+            cartItems.add(new CartItem(
+                    product,quanti,product.getPrice()*quanti));
 
-        Calendar calForDate  = Calendar.getInstance();
-
-        SimpleDateFormat currentDate = new SimpleDateFormat("MM dd, yyyy");
-        saveCurrentDate = currentDate.format(calForDate.getTime());
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
-        saveCurrentTime = currentTime.format(calForDate.getTime());
-
-        final HashMap<String,Object> cartMap =  new HashMap<>();
-
-        cartMap.put("productName",name.getText().toString());
-        cartMap.put("productPrice",price.getText().toString());
-        cartMap.put("currentTime",saveCurrentTime);
-        cartMap.put("currentDate",saveCurrentDate);
-        cartMap.put("totalQuantity",quantity.getText().toString());
-        cartMap.put("totalPrice",totalPrice);
-
-        firestore.collection("AddtoCart").document(auth.getCurrentUser().getUid())
-                .collection("User").add(cartMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
+            cart = new Cart(cartItems);
+            firestore.collection("Cart").document(auth.getCurrentUser().getUid())
+                    .collection("CartItem")
+                    .add(cart)
+                    .addOnSuccessListener(documentReference -> {
+                        String cartId= documentReference.getId();
+                        Log.d("CartItem", "CraftItem add with ID: " + cartId);;
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("cartId", cartId);
+                        editor.apply();
                         Toast.makeText(DetailedActivity.this,"Add to cart",Toast.LENGTH_SHORT).show();
                         finish();
-                    }
-                });
+                    })
+                    .addOnFailureListener(e -> Log.w("CartItem", "Error adding address", e));
+        }else{
+            firestore.collection("Cart")
+                    .document(auth.getCurrentUser().getUid())
+                    .collection("CartItem")
+                    .document(cartID)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        // Retrieve existing cart data
+                        Cart existingCart = documentSnapshot.toObject(Cart.class);
+
+                        if (existingCart != null) {
+                            // Get the current cartItems list or initialize it if null
+                            List<CartItem> cartItems = existingCart.getCartItems();
+                            if (cartItems == null) {
+                                cartItems = new ArrayList<>();
+                            }
+
+                            // Create new CartItem
+                            int quanti = Integer.parseInt(quantity.getText().toString());
+                            Product product = new Product(
+                                    getIntent().getStringExtra("imgURL"),
+                                    name.getText().toString(),
+                                    Double.parseDouble(price.getText().toString())
+                            );
+                            CartItem newCartItem = new CartItem(product, quanti, product.getPrice() * quanti);
+
+                            // Add the new item to the cartItems list
+                            cartItems.add(newCartItem);
+
+                            // Update the cart with the modified cartItems list
+                            existingCart.setCartItems(cartItems);
+
+                            // Update Firestore with the modified cart
+                            firestore.collection("Cart")
+                                    .document(auth.getCurrentUser().getUid())
+                                    .collection("CartItem")
+                                    .document(cartID)
+                                    .set(existingCart) // set() will overwrite only the fields we modify
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("CartItem", "Cart updated with new item: " + cartID);
+                                        Toast.makeText(DetailedActivity.this, "Item added to cart", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.w("CartItem", "Error adding item to cart", e);
+                                        Toast.makeText(DetailedActivity.this, "Failed to add item to cart", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("CartItem", "Error retrieving cart", e);
+                        Toast.makeText(DetailedActivity.this, "Failed to retrieve cart", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+        }
     }
 }

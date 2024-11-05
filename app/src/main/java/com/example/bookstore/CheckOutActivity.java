@@ -1,6 +1,7 @@
 package com.example.bookstore;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        signInAnonmously();
+        //signInAnonmously();
         setContentView(R.layout.checkout);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.CheckScreen), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -69,6 +70,10 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
             return insets;
         });
         addressId = getIntent().getStringExtra("AddressID");
+        cartId = getIntent().getStringExtra("cartId");
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String cartID = sharedPreferences.getString("cartId", null); // null is the default value if "cartId" is not found
+
         // Initialize views
         userAddressTextView = findViewById(R.id.userAddress);
         userPhone = findViewById(R.id.userPhone);
@@ -76,7 +81,13 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
         if(addressId != null){
             fetchUserAddress();
         }
-        fetchAllProduct();
+        if (getIntent().getStringExtra("action")!= null){
+            fetchCartProduct();
+        }else{
+            cartId = cartID;
+            fetchCartProduct();
+        }
+        //fetchAllProduct();
 
         submitOrder = findViewById(R.id.btn_ordersubmit);
         submitOrder.setOnClickListener(new View.OnClickListener() {

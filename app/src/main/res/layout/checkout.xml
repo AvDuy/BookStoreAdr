@@ -6,39 +6,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- User Info Section -->
-    <LinearLayout
-        android:id="@+id/userInfoSection"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:background="#FFFFFF"
-        android:orientation="vertical"
-        android:padding="8dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/userInfoSection"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="4dp"
-            android:text="KHÁNH TRẺ"
-            android:textStyle="bold" />
+            android:layout_marginTop="4dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/userPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0987654321" />
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:text="KHÁNH TRẺ"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/userAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ASDFB SDGBF AGDSF SHRF EG" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/userPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0987654321" />
+
+            <TextView
+                android:id="@+id/userAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ASDFB SDGBF AGDSF SHRF EG" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/btn_location"
@@ -48,7 +59,7 @@
         android:layout_marginTop="10dp"
         android:text="Change Location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userInfoSection" />
+        app:layout_constraintTop_toBottomOf="@+id/cardview" />
 
     <Button
         android:id="@+id/btn_ordersubmit"
@@ -66,13 +77,13 @@
         android:id="@+id/paymentSection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_border"
         android:orientation="vertical"
         android:padding="8dp"
-        android:background="@drawable/rounded_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+        app:layout_constraintTop_toBottomOf="@id/productCard">
 
         <TextView
             android:id="@+id/paymentTypeText"
@@ -139,21 +150,31 @@
         app:layout_constraintBottom_toTopOf="@id/btn_ordersubmit"
         app:layout_constraintEnd_toStartOf="@id/price" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/productCard"
         android:layout_width="match_parent"
-        android:layout_height="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/paymentSection"
+        android:layout_marginRight="20dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_location">
+        app:layout_constraintTop_toBottomOf="@id/btn_location">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cartList"
-            android:layout_width="409dp"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cartList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
