@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
 
-        if (TextUtils.isEmpty(userEmail)) {
+        if (!isValidEmail(userEmail)) {
             Toast.makeText(this, "Enter Email Address!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -93,6 +93,10 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private boolean isValidEmail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public void signUp(View view) {
