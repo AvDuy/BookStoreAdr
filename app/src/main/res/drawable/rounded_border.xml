@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <!-- Background color inside the shape -->
+        <solid android:color="#FFFFFF"/> <!-- Replace with desired background color -->
+
+        <!-- Set the corner radius for rounded corners -->
+        <corners android:radius="16dp" /> <!-- Adjust the radius as needed -->
+
+        <!-- Define the border outline -->
+        <stroke
+            android:width="2dp"
+        android:color="#FF6200EE" /> <!-- Border color (replace with desired color) -->
+
+        <!-- Optional: Add padding inside the shape -->
+        <padding
+            android:left="8dp"
+            android:top="8dp"
+            android:right="8dp"
+            android:bottom="8dp" />
+    </shape>
+</selector>

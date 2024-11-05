@@ -6,9 +6,7 @@ public class Cart {
     private int cartID;
     private List<CartItem> cartItems;
 
-    public Cart(List<CartItem> cartItems) {
-        this.cartItems = cartItems;
-    }
+    public Cart(List<CartItem> cartItems) {this.cartItems = cartItems;}
 
     public int getCartID() {return cartID;}
     public void setCartID(int cartID) {this.cartID = cartID;}

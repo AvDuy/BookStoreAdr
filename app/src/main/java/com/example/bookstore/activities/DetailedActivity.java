@@ -1,5 +1,6 @@
 package com.example.bookstore.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.bookstore.CheckOutActivity;
+import com.example.bookstore.LocationActivity;
 import com.example.bookstore.R;
 import com.example.bookstore.models.NewProductsModel;
 import com.example.bookstore.models.PopularProductsModel;
@@ -112,6 +115,13 @@ public class DetailedActivity extends AppCompatActivity {
             }
         });
 
+        buyNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setBuyNow();
+            }
+        });
+
         addItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,6 +151,11 @@ public class DetailedActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setBuyNow(){
+        Intent intent = new Intent(DetailedActivity.this, CheckOutActivity.class);
+        startActivity(intent);
     }
 
     private void addToCart() {

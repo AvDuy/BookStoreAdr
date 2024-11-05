@@ -7,6 +7,7 @@ public class Order {
     private String userId;
     private String cartId;
     private String addressId;
+    private String paymentMethod;
     private double totalAmount;
     private String status;
     private Date createdAt;
@@ -14,6 +15,17 @@ public class Order {
 
     // Empty constructor for Firestore
     public Order() {}
+
+    public Order(String userId, String cartId, String addressId, String paymentMethod, double totalAmount, String status, Date createdAt, Date updatedAt) {
+        this.userId = userId;
+        this.cartId = cartId;
+        this.addressId = addressId;
+        this.paymentMethod = paymentMethod;
+        this.totalAmount = totalAmount;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Order(String userId, String cartId, String addressId, double totalAmount, String status, Date createdAt, Date updatedAt) {
         this.userId = userId;
@@ -24,6 +36,9 @@ public class Order {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public String getPaymentMethod() {return paymentMethod;}
+    public void setPaymentMethod(String paymentMethod) {this.paymentMethod = paymentMethod;}
 
     public String getAddressId() {return addressId;}
     public void setAddressId(String addressId) {this.addressId = addressId;}
