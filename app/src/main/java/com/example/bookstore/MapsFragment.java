@@ -64,9 +64,6 @@ ActivityCompat.OnRequestPermissionsResultCallback   {
 
 
             map = googleMap;
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
             // Enable the zoom controls for the map
             map.getUiSettings().setZoomControlsEnabled(true);
             map.setOnMyLocationButtonClickListener(MapsFragment.this);
@@ -80,7 +77,11 @@ ActivityCompat.OnRequestPermissionsResultCallback   {
 
     public void zoomOnMap(LatLng latLng){
         CameraUpdate newLat = CameraUpdateFactory.newLatLngZoom(latLng, 12f);
+        map.clear();
+        map.addMarker(new MarkerOptions().position(latLng).title("Marker in " + latLng));
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.animateCamera(newLat);
+
     }
 
     @SuppressLint("MissingPermission")

@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookstore.activities.MainActivity;
 import com.example.bookstore.models.Address;
 import com.example.bookstore.models.Cart;
 import com.example.bookstore.models.CartItem;
@@ -45,7 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class CheckOutActivity extends AppCompatActivity implements ProductAdapter.OnProductClickListener {
-    private TextView userAddressTextView, totalPrice, userPhone;
+    private TextView userAddressTextView, totalPrice, userPhone, userName;
     private Button changeLocation, submitOrder;
     private List<Product> orderList;
     private List<CartItem> cartItems;
@@ -69,17 +70,21 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        addressId = getIntent().getStringExtra("AddressID");
+
         cartId = getIntent().getStringExtra("cartId");
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String cartID = sharedPreferences.getString("cartId", null); // null is the default value if "cartId" is not found
+        addressId = addressId = getIntent().getStringExtra("AddressID");;
 
         // Initialize views
         userAddressTextView = findViewById(R.id.userAddress);
         userPhone = findViewById(R.id.userPhone);
+        userName = findViewById(R.id.userName);
         // Fetch user data
         if(addressId != null){
             fetchUserAddress();
+        }else{
+            fetchFirstUserAddress();
         }
         if (getIntent().getStringExtra("action")!= null){
             fetchCartProduct();
@@ -196,13 +201,19 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
                 .addOnSuccessListener(documentReference -> {
                     String orderId = documentReference.getId();
                     Log.d("OrderAdd", "OrderAdd added with ID: " + orderId);
+                    SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove("cartId"); // Replace "cartId" with the specific key you want to remove
+                    editor.apply();
+                    cartId = null;
                     Toast.makeText(CheckOutActivity.this, "Order successfully.",
                             Toast.LENGTH_SHORT).show();
-                    finish();
-                    // Redirect to CheckOutActivity and pass the AddressID
-                    //Intent intent = new Intent(LocationActivity.this, CheckOutActivity.class);
-                    //intent.putExtra("AddressID", addressId);
-                    //startActivity(intent);
+                    if(selectedRadioButton.getText().toString().equals("Online Banking")){
+                        Intent intent = new Intent(CheckOutActivity.this, BankingActivity.class);
+                        startActivity(intent);
+                    }else {
+                    Intent intent = new Intent(CheckOutActivity.this, MainActivity.class);
+                    startActivity(intent);}
                 })
                 .addOnFailureListener(e -> Log.w("OrderAdd", "Error adding address", e));
 
@@ -240,35 +251,31 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
         rec.setAdapter(adapter);
     }
 
-    private void fetchAllProduct(){
-        db.collection("AllProducts")
-                .limit(5) // Limit to 3 products
+    private void fetchFirstUserAddress(){
+        db.collection("users").document(currentUser.getUid())
+                .collection("addresses")
+                .limit(1)  // Limit the query to fetch only the first document
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<Product> products = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Assuming you have a Product class to hold product data
-                                Product product = new Product(
-                                        document.getString("img_url"),
-                                        document.getString("name"),
-                                        document.getDouble("price"));
-                                total += product.getPrice();
-                                products.add(product);
-                            }
-                            if(orderList == null){
-                                orderList = products;
-                                setUp();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0); // Get the first document
+                        Address address = document.toObject(Address.class);
 
-                            }
-                            // Do something with the list of products (e.g., update UI)
-                            //displayProducts(products, total);
-                        } else {
-                            // Handle the error
-                            Log.w("MainActivity", "Error getting documents.", task.getException());
+                        if (address != null) {
+                            // Display address data
+                            String fullAddress = address.getStreet() + ", " + address.getWard() + ", "
+                                    + address.getDistrict() + ", " + address.getProvince();
+                            address.setAddressId(document.getId());
+
+                            userPhone.setText(document.getString("phone"));
+                            userName.setText(document.getString("name"));
+                            userAddressTextView.setText(fullAddress);
                         }
+                    } else {
+                        Log.d("Firebase", "No address found for this user.");
+                        userPhone.setText("No phone number found!");
+                        userName.setText("No name found!");
+                        userAddressTextView.setText("No address found!");
                     }
                 });
     }
@@ -289,6 +296,7 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
                                         + address.getDistrict() + ", " +address.getProvince() ;
                                 address.setAddressId(addressId);
                                 userPhone.setText(document.getString("phone"));
+                                userName.setText(document.getString("name"));
                                 userAddressTextView.setText(fullAddress);
                             }
                         } else {

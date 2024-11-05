@@ -3,6 +3,7 @@ package com.example.bookstore;
 import static com.google.android.gms.common.util.CollectionUtils.listOf;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -83,14 +84,17 @@ public class LocationActivity extends AppCompatActivity {
                 String selectedDistrict = spinnerDistrict.getSelectedItem().toString();
                 String selectedWard = spinnerWard.getSelectedItem().toString();
                 TextView tvStreet = findViewById(R.id.tv_street);
+                TextView tvName = findViewById(R.id.tv_yourname);
                 TextView tvPhone = findViewById(R.id.tv_phone);
                 String enteredStreet = tvStreet.getText().toString();
+                String enteredName = tvName.getText().toString();
                 String enteredPhone = tvPhone.getText().toString();
 
                 if (currentUser != null) {
                     String userId = currentUser.getUid();
                     // Save an address for a user
                     Map<String, Object> address = new HashMap<>();
+                    address.put("name", enteredName);
                     address.put("phone", enteredPhone);
                     address.put("street", enteredStreet);
                     address.put("ward", selectedWard);
@@ -105,6 +109,10 @@ public class LocationActivity extends AppCompatActivity {
                             .add(address)
                             .addOnSuccessListener(documentReference -> {
                                 String addressId = documentReference.getId();
+                                SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("addressID", addressId);
+                                editor.apply();
                                 Log.d("Firestore", "Address added with ID: " + addressId);
 
                                 // Redirect to CheckOutActivity and pass the AddressID
