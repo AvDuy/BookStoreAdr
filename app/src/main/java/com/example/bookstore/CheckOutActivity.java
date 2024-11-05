@@ -196,7 +196,9 @@ public class CheckOutActivity extends AppCompatActivity implements ProductAdapte
                 .addOnSuccessListener(documentReference -> {
                     String orderId = documentReference.getId();
                     Log.d("OrderAdd", "OrderAdd added with ID: " + orderId);
-
+                    Toast.makeText(CheckOutActivity.this, "Order successfully.",
+                            Toast.LENGTH_SHORT).show();
+                    finish();
                     // Redirect to CheckOutActivity and pass the AddressID
                     //Intent intent = new Intent(LocationActivity.this, CheckOutActivity.class);
                     //intent.putExtra("AddressID", addressId);
