@@ -55,7 +55,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
                                 tab.setText("ALL");
                                 break;
                             case 1:
-                                tab.setText("Process");
+                                tab.setText("Pending");
                                 break;
                             case 2:
                                 tab.setText("Confirm");
