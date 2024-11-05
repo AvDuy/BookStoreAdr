@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,7 +22,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class UpdateProfile extends AppCompatActivity {
-    private EditText edtName, edtGender, edtDob, edtEmail, edtPhone;
+    private EditText edtName, edtDob, edtEmail, edtPhone;
+    private Spinner edtGender;
     private Button saveButton, chooseImageButton;
     private ImageView profileImageView;
     private FirebaseFirestore firestore;
@@ -37,10 +40,14 @@ public class UpdateProfile extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
-
+        Spinner spinnerGender = findViewById(R.id.spinner_gender);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.gender_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGender.setAdapter(adapter);
         storageReference = FirebaseStorage.getInstance().getReference("profile_images");
         edtName = findViewById(R.id.edt_name);
-        edtGender = findViewById(R.id.edt_gender);
+        edtGender = findViewById(R.id.spinner_gender);
         edtDob = findViewById(R.id.edt_dob);
         edtEmail = findViewById(R.id.edt_email);
         edtPhone = findViewById(R.id.edt_phone);
@@ -73,7 +80,8 @@ public class UpdateProfile extends AppCompatActivity {
                     user_infoModel userInfo = documentSnapshot.toObject(user_infoModel.class);
                     if (userInfo != null) {
                         edtName.setText(userInfo.getName());
-                        edtGender.setText(userInfo.isGender() ? "Male" : "Female");
+                        int genderPosition = userInfo.isGender() ? 0 : 1;
+                        edtGender.setSelection(genderPosition);
                         edtDob.setText(userInfo.getDob());
                         edtEmail.setText(userInfo.getEmail());
                         edtPhone.setText(userInfo.getPhone());
@@ -95,7 +103,7 @@ public class UpdateProfile extends AppCompatActivity {
 
     private void updateUserInfo() {
         String name = edtName.getText().toString().trim();
-        boolean gender = edtGender.getText().toString().equalsIgnoreCase("Male");
+        boolean gender = edtGender.getSelectedItemPosition() == 0;
         String dob = edtDob.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
         String phone = edtPhone.getText().toString().trim();
@@ -109,14 +117,9 @@ public class UpdateProfile extends AppCompatActivity {
                         String avatarUrl = uri.toString();
                         // Cập nhật thông tin người dùng bao gồm cả URL hình ảnh
                         if (userId != null) {
-                            DocumentReference docRef = firestore.collection("users").document(userId); // Sử dụng userId
-                            docRef.update(
-                                    "Name", name,
-                                    "Gender", gender,
-                                    "Date of birth", dob,
-                                    "Email", email,
-                                    "Phone", phone,
-                                    "Avatar", avatarUrl // Cập nhật URL hình ảnh vào Firestore
+                            DocumentReference docRef = firestore.collection("users").document(userId);
+                            docRef.set(
+                                    new user_infoModel(avatarUrl, name, gender, dob, email, phone)
                             ).addOnSuccessListener(aVoid -> {
                                 Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(UpdateProfile.this, UserProfile.class));
@@ -130,16 +133,13 @@ public class UpdateProfile extends AppCompatActivity {
                 Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show();
                 Log.w("UpdateProfileActivity", "Error uploading image", e);
             });
+
         } else {
             // Nếu không có hình ảnh, chỉ cập nhật thông tin không có Avatar
             if (userId != null) {
-                DocumentReference docRef = firestore.collection("users").document(userId); // Sử dụng userId
-                docRef.update(
-                        "Name", name,
-                        "Gender", gender,
-                        "Date of birth", dob,
-                        "Email", email,
-                        "Phone", phone
+                DocumentReference docRef = firestore.collection("users").document(userId);
+                docRef.set(
+                        new user_infoModel("", name, gender, dob, email, phone)
                 ).addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(UpdateProfile.this, UserProfile.class));

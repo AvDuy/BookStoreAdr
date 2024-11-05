@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -41,26 +40,31 @@ public class User_menu extends AppCompatActivity {
     }
 
     private void loadUserInfo() {
-        String userId = auth.getCurrentUser().getUid();
-        DocumentReference docRef = firestore.collection("users").document(userId);
+        String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
 
-        docRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                String name = documentSnapshot.getString("Name");
-                String avatarUrl = documentSnapshot.getString("Avatar");
+        if (userId != null) {
+            DocumentReference docRef = firestore.collection("users").document(userId);
 
-                usernameTextView.setText(name);
+            docRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    String name = documentSnapshot.getString("Name");
+                    String avatarUrl = documentSnapshot.getString("Avatar");
 
-                if (avatarUrl != null && !avatarUrl.isEmpty()) {
-                    Picasso.get()
-                            .load(avatarUrl)
-                            .placeholder(R.drawable.ic_launcher_background)
-                            .error(R.drawable.ic_avatardefault)
-                            .into(avatarImageView);
+                    usernameTextView.setText(name);
+
+                    if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                        Picasso.get()
+                                .load(avatarUrl)
+                                .placeholder(R.drawable.ic_launcher_background)
+                                .error(R.drawable.ic_avatardefault)
+                                .into(avatarImageView);
+                    }
+                } else {
+                    Log.d("User_menu", "No such document");
                 }
-            } else {
-                Log.d("User_menu", "No such document");
-            }
-        }).addOnFailureListener(e -> Log.w("User_menu", "Error getting document", e));
+            }).addOnFailureListener(e -> Log.w("User_menu", "Error getting document", e));
+        } else {
+            Log.w("User_menu", "User not logged in");
+        }
     }
 }
