@@ -41,10 +41,10 @@ public class RegisterActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        if(auth.getCurrentUser() != null){
+        /*if(auth.getCurrentUser() != null){
             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
             finish();
-        }
+        }*/
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -100,9 +100,9 @@ public class RegisterActivity extends AppCompatActivity {
         String userID = auth.getCurrentUser().getUid();
 
         Map<String,Object> userMap = new HashMap<>();
-        userMap.put("name",userName);
-        userMap.put("email",userEmail);
-        userMap.put("phone",userPhone);
+        userMap.put("Name",userName);
+        userMap.put("Email",userEmail);
+        userMap.put("Phone",userPhone);
 
         firestore.collection("users").document(userID)
                 .set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
