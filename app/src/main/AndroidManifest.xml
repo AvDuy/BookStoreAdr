@@ -23,6 +23,9 @@
             android:name=".activities.NotificationActivity"
             android:exported="false" />
         <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".CartActivity"
             android:exported="false" />
         <activity
