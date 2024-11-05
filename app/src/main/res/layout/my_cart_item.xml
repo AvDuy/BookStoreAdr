@@ -7,162 +7,143 @@
     android:elevation="4dp"
     android:layout_margin="5dp">
 
-    <LinearLayout
-        android:padding="7dp"
-        android:background="#FB9FDE"
+    <!-- Main container with RelativeLayout for delete button positioning -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
+        <!-- Delete Button centered icon -->
+
+        <!-- Main LinearLayout for content with padding to avoid overlapping delete button -->
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="27dp"
+            android:layout_height="86dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Delete"
+            android:onClick="deleteItem"
+            android:padding="2dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_delete" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:padding="7dp"
+            android:layout_marginEnd="40dp"
+            android:background="#FB9FDE">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- ImageView for the entire layout on the left -->
+            <ImageView
+                android:id="@+id/img_product"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_baseline_shopping_cart_24"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="Product Image" />
+
+            <!-- Vertical LinearLayout for TextViews on the right side -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Current Date: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/current_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Current Date: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <!-- Product Name Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Product Name: "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/product_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Example Product"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <!-- Product Price Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Product Price: "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/product_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000 USD"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <!-- Total Price Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Price: "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/total_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000 USD"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <!-- Total Quantity Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Quantity: "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/total_quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Current Time: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/current_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Current Time: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Product Name: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/product_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Current Date: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Product Price: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/product_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Current Date: "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Total Price "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/total_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Total price "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Total Quantity "
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/total_quantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Total Quantity"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -159,21 +159,12 @@ public class DetailedActivity extends AppCompatActivity {
     }
 
     private void addToCart() {
-        String saveCurrentTime, saveCurrentDate;
 
-        Calendar calForDate  = Calendar.getInstance();
-
-        SimpleDateFormat currentDate = new SimpleDateFormat("MM dd, yyyy");
-        saveCurrentDate = currentDate.format(calForDate.getTime());
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
-        saveCurrentTime = currentTime.format(calForDate.getTime());
 
         final HashMap<String,Object> cartMap =  new HashMap<>();
 
         cartMap.put("productName",name.getText().toString());
         cartMap.put("productPrice",price.getText().toString());
-        cartMap.put("currentTime",saveCurrentTime);
-        cartMap.put("currentDate",saveCurrentDate);
         cartMap.put("totalQuantity",quantity.getText().toString());
         cartMap.put("totalPrice",totalPrice);
 

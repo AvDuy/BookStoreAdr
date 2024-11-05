@@ -2,8 +2,7 @@ package com.example.bookstore.model;
 
 public class MyCartModel {
 
-    String CurrentTime;
-    String CurrentDate;
+    String Imgurl;
     String productName;
     String productPrice;
     String totalQuantity;
@@ -12,29 +11,19 @@ public class MyCartModel {
     public MyCartModel() {
     }
 
-    public MyCartModel(String currentTime, String currentDate, String productName, String productPrice, String totalQuantity, int totalPrice) {
-        CurrentTime = currentTime;
-        CurrentDate = currentDate;
+    public MyCartModel(String imgurl, String productName, String productPrice, String totalQuantity, int totalPrice) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.totalQuantity = totalQuantity;
         this.totalPrice = totalPrice;
     }
 
-    public String getCurrentTime() {
-        return CurrentTime;
+    public String getImgurl() {
+        return Imgurl;
     }
 
-    public void setCurrentTime(String currentTime) {
-        CurrentTime = currentTime;
-    }
-
-    public String getCurrentDate() {
-        return CurrentDate;
-    }
-
-    public void setCurrentDate(String currentDate) {
-        CurrentDate = currentDate;
+    public void setImgurl(String imgurl) {
+        Imgurl = imgurl;
     }
 
     public String getProductName() {

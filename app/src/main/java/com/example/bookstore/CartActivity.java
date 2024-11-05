@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -58,8 +59,8 @@ public class CartActivity extends AppCompatActivity {
         recyclerView.setAdapter(cartAdapter);
         overAllAmount = findViewById(R.id.tv_total);
 
-        firestore.collection("Addtocart").document(auth.getCurrentUser().getUid())
-                .collection("User").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
+                .collection("CartItem").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
@@ -80,4 +81,8 @@ public class CartActivity extends AppCompatActivity {
             overAllAmount.setText("Total Amount: " +totalBill +"$");
         }
     };
+
+    public void CheckOut(View view) {
+
+    }
 }
