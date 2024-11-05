@@ -28,7 +28,7 @@
             android:id="@+id/backArrow"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/backarrow"
+            android:src="@drawable/img"
             android:contentDescription="Back"
             android:background="@android:color/transparent"/>
 
@@ -51,7 +51,6 @@ android:layout_width="0dp"
 android:layout_height="wrap_content"
 android:background="@android:color/holo_blue_light"
     android:elevation="4dp"
-    app:tabTextAppearance="@style/TabTextAppearance"
     app:tabTextColor="@android:color/white"
     app:tabSelectedTextColor="@android:color/white"
     app:tabIndicatorColor="@android:color/white"
