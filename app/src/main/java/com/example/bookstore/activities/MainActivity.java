@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
         }else if (id == R.id.thongbao) {
             openNotifications();
             return true;
+        }else if (id == R.id.menu) {
+            startActivity(new Intent( MainActivity.this, User_menu.class));
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
