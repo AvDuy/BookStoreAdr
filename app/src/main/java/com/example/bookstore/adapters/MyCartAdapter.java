@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bookstore.R;
 import com.example.bookstore.model.MyCartModel;
 
@@ -36,8 +39,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyCartAdapter.ViewHolder holder, int position) {
-        holder.date.setText(list.get(position).getCurrentDate());
-        holder.time.setText(list.get(position).getCurrentTime());
+        Glide.with(holder.itemView.getContext())
+                .load(list.get(position).getImgurl()) // Assuming getImage() returns a String URL
+                .into(holder.imgurl);
         holder.price.setText(list.get(position).getProductPrice());
         holder.name.setText(list.get(position).getProductName());
         holder.totalPrice.setText(list.get(position).getTotalPrice());
@@ -59,15 +63,16 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView name,price,date,time,totalQuantity,totalPrice;
-
+        ImageView imgurl;
+        ImageButton delete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            imgurl = itemView.findViewById(R.id.img_product);
             name = itemView.findViewById(R.id.product_name);
             price = itemView.findViewById(R.id.product_price);
-            date = itemView.findViewById(R.id.current_date);
-            time = itemView.findViewById(R.id.current_time);
             totalQuantity = itemView.findViewById(R.id.total_quantity);
             totalPrice = itemView.findViewById(R.id.total_price);
+            delete = itemView.findViewById(R.id.btn_delete);
         }
     }
 }

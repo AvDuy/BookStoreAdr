@@ -2,39 +2,49 @@ package com.example.bookstore.model;
 
 public class MyCartModel {
 
-    String CurrentTime;
-    String CurrentDate;
+    String Imgurl;
     String productName;
     String productPrice;
     String totalQuantity;
     int totalPrice;
+    String Del;
+    private String cartId;
 
     public MyCartModel() {
     }
 
-    public MyCartModel(String currentTime, String currentDate, String productName, String productPrice, String totalQuantity, int totalPrice) {
-        CurrentTime = currentTime;
-        CurrentDate = currentDate;
+    public MyCartModel(String imgurl, String productName, String productPrice, String totalQuantity, int totalPrice, String del,String cartId) {
+        this.Imgurl = imgurl;
         this.productName = productName;
         this.productPrice = productPrice;
         this.totalQuantity = totalQuantity;
         this.totalPrice = totalPrice;
+        this.Del = del;
+        this.cartId = cartId;
     }
 
-    public String getCurrentTime() {
-        return CurrentTime;
+    public String getCartId() {
+        return cartId;
     }
 
-    public void setCurrentTime(String currentTime) {
-        CurrentTime = currentTime;
+    public void setCartId(String cartId) {
+        this.cartId = cartId;
     }
 
-    public String getCurrentDate() {
-        return CurrentDate;
+    public String getDel() {
+        return Del;
     }
 
-    public void setCurrentDate(String currentDate) {
-        CurrentDate = currentDate;
+    public void setDel(String del) {
+        Del = del;
+    }
+
+    public String getImgurl() {
+        return Imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        Imgurl = imgurl;
     }
 
     public String getProductName() {

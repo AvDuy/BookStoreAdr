@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookstore.activities.DetailedActivity;
 import com.example.bookstore.adapters.MyCartAdapter;
 import com.example.bookstore.model.MyCartModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,8 +61,8 @@ public class CartActivity extends AppCompatActivity {
         recyclerView.setAdapter(cartAdapter);
         overAllAmount = findViewById(R.id.tv_total);
 
-        firestore.collection("Addtocart").document(auth.getCurrentUser().getUid())
-                .collection("User").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
+                .collection("CartItem").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
@@ -80,4 +83,37 @@ public class CartActivity extends AppCompatActivity {
             overAllAmount.setText("Total Amount: " +totalBill +"$");
         }
     };
+
+    public void CheckOut(View view) {
+        Intent intent = new Intent(CartActivity.this, CheckOutActivity.class);
+        startActivity(intent);
+    }
+
+    public void deleteItem(String cartId) {
+        // Get the current user's cart collection reference
+        firestore.collection("Cart")
+                .document(auth.getCurrentUser().getUid())
+                .collection("CartItem")
+                .document(cartId)
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // Remove from local list and notify the adapter
+                            for (int i = 0; i < cartModelList.size(); i++) {
+                                if (cartModelList.get(i).getCartId().equals(cartId)) {
+                                    cartModelList.remove(i);
+                                    cartAdapter.notifyItemRemoved(i);
+                                    break; // Exit loop after removing
+                                }
+                            }
+                        } else {
+                            // Handle error
+                            Log.w("Firestore", "Error deleting document", task.getException());
+                        }
+                    }
+                });
+    }
+
 }
