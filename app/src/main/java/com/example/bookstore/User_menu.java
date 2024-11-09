@@ -3,10 +3,13 @@ package com.example.bookstore;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bookstore.activities.OrderHistoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,6 +33,7 @@ public class User_menu extends AppCompatActivity {
         avatarImageView = findViewById(R.id.ava);
         usernameTextView = findViewById(R.id.username);
         infoButton = findViewById(R.id.info);
+
 
         loadUserInfo();
 
@@ -66,5 +70,10 @@ public class User_menu extends AppCompatActivity {
         } else {
             Log.w("User_menu", "User not logged in");
         }
+    }
+
+    public void history(View view) {
+        Intent intent = new Intent(User_menu.this, OrderHistoryActivity.class);
+        startActivity(intent);
     }
 }

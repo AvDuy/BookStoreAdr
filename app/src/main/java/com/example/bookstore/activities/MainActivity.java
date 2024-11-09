@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
@@ -13,10 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.bookstore.CheckOutActivity;
-import com.example.bookstore.LoginActivity;
 import com.example.bookstore.R;
-import com.example.bookstore.RegisterActivity;
 import com.example.bookstore.User_menu; // Nếu bạn có lớp này
 import com.example.bookstore.fragments.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.menu_logout) {
             auth.signOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(MainActivity.this, NotificationActivity.LoginActivity.class));
             finish();
         } else if (id == R.id.menu_my_cart) {
-            startActivity(new Intent( MainActivity.this, CheckOutActivity.class));
+            startActivity(new Intent( MainActivity.this, NotificationActivity.CheckOutActivity.class));
             return true;
         }else if (id == R.id.thongbao) {
             openNotifications();

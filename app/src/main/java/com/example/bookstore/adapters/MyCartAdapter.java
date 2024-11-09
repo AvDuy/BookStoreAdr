@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookstore.R;
-import com.example.bookstore.model.MyCartModel;
+import com.example.bookstore.models.MyCartModel;
 
 import java.util.List;
 

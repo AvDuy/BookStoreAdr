@@ -7,17 +7,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.bookstore.activities.MainActivity;
+import com.example.bookstore.activities.NotificationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -120,6 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void signin(View view){
-        startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+        startActivity(new Intent(RegisterActivity.this, NotificationActivity.LoginActivity.class));
     }
 }

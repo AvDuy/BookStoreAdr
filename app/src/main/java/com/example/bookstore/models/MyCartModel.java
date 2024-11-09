@@ -1,4 +1,4 @@
-package com.example.bookstore.model;
+package com.example.bookstore.models;
 
 public class MyCartModel {
 

@@ -10,12 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.bookstore.CheckOutActivity;
-import com.example.bookstore.LocationActivity;
 import com.example.bookstore.R;
 import com.example.bookstore.models.Cart;
 import com.example.bookstore.models.CartItem;
@@ -23,16 +20,10 @@ import com.example.bookstore.models.NewProductsModel;
 import com.example.bookstore.models.PopularProductsModel;
 import com.example.bookstore.models.Product;
 import com.example.bookstore.models.ShowAllModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 public class DetailedActivity extends AppCompatActivity {
@@ -175,7 +166,7 @@ public class DetailedActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     String cartId= documentReference.getId();
                     Log.d("CartItem", "CraftItem add with ID: " + cartId);;
-                    Intent intent = new Intent(DetailedActivity.this, CheckOutActivity.class);
+                    Intent intent = new Intent(DetailedActivity.this, NotificationActivity.CheckOutActivity.class);
                     intent.putExtra("cartId", cartId);
                     intent.putExtra("action", "buynow");
                     startActivity(intent);

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CartActivity">
+    tools:context=".activities.NotificationActivity$CartActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/show_all_toolbar"

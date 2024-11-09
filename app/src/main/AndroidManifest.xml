@@ -19,7 +19,7 @@
         android:theme="@style/Theme.BookStore"
         tools:targetApi="31" >
         <activity
-            android:name=".BankingActivity"
+            android:name=".activities.NotificationActivity$BankingActivity"
             android:exported="false" />
         <activity
             android:name=".activities.NotificationActivity"
@@ -28,7 +28,7 @@
             android:name=".ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".CartActivity"
+            android:name=".activities.NotificationActivity$CartActivity"
             android:exported="false" />
         <activity
             android:name=".OTP_Verify"
@@ -36,14 +36,14 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-        <activity android:name=".LocationActivity" />
+        <activity android:name=".activities.NotificationActivity$LocationActivity" />
         <activity
             android:name=".activities.ShowAllActivity"
             android:exported="false" />
         
 
         <activity
-            android:name=".CheckOutActivity"
+            android:name=".activities.NotificationActivity$CheckOutActivity"
             android:exported="true" />
         <activity
             android:name=".activities.MainActivity"
@@ -59,7 +59,7 @@
             android:exported="true" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.NotificationActivity$LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,8 +73,12 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+
         <activity android:name=".activities.OrderDetailHistoryActivity" />
-        <activity android:name=".BankActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

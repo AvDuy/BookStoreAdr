@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookstore.activities.NotificationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +45,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         backToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                startActivity(new Intent(ResetPasswordActivity.this, NotificationActivity.LoginActivity.class));
                 finish();
             }
         });
